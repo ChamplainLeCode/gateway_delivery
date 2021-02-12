@@ -24,7 +24,7 @@ public interface AgentRepository extends JpaRepository<AutomateAgents, String> {
 	AutomateAgents doLogin(@Param("phone") String phone, @Param("imei") String imei);
 	
 	@Query("Select status from AutomateAgents where phone = :phone")
-	AgentStatus getStatusByPhone(String phone);
+	AgentStatus getStatusByPhone(@Param("phone") String phone);
 
 	AutomateAgents findAutomateAgentsByPhone(String phone);
 }

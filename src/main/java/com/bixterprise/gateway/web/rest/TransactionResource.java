@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.socket.WebSocketSession;
 
 import com.bixterprise.gateway.repository.AgentRepository;
 import com.bixterprise.gateway.repository.AgentTransactionRepository;
@@ -26,7 +25,9 @@ import com.bixterprise.gateway.domain.AgentTransaction;
 import com.bixterprise.gateway.domain.AutomateAgents;
 import com.bixterprise.gateway.domain.TransactionActivity;
 import com.bixterprise.gateway.domain.Transactions;
+import com.bixterprise.gateway.domain.WorkSpace;
 import com.bixterprise.gateway.domain.enums.AgentStatus;
+import com.bixterprise.gateway.service.WorkSpaceService;
 import com.bixterprise.gateway.utils.IQueueWriter;
 import com.bixterprise.gateway.utils.IWorkerImpl;
 import com.bixterprise.gateway.utils.OperatorResolver;
@@ -34,12 +35,15 @@ import com.bixterprise.gateway.utils.TransactionStatus;
 import com.bixterprise.gateway.utils.http;
 
 import java.util.HashMap;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.locks.Lock;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/commandes")
 public class TransactionResource {
-	protected static String LOG_SEPARATOR = "$<<<>>>$";
+	public static String LOG_SEPARATOR = "$<<<>>>$";
 	
 	IWorkerImpl<TransactionActivity> worker;
 	IQueueWriter<TransactionActivity> writer = new IQueueWriter<>();
@@ -57,49 +61,19 @@ public class TransactionResource {
 	AgentTransactionRepository agentTransactionRepository;
 
 	@Autowired WebSocketService ws;
+        
+        @Autowired @Qualifier("gatewayAgentListLock") Lock agentListLock;
+        
 
-	public TransactionResource() {
-        this.worker = new IWorkerImpl<>(at -> {
-            HashMap obj = new HashMap();
-            obj.put("collapse_key", "type_a");
-            obj.put("to", at.getAgentPhone().getFcm_token());
-            HashMap data = new HashMap();
-            data.put("id", at.getId());
-            data.put("transaction_id", at.getTransactionId().getReference());
-            data.put("client_phone", at.getTransactionId().getReceiverPhone());
-            data.put("automate_agent_phone", at.getAgentPhone().getPhone());
-            data.put("status", at.getStatus());
-            data.put("amount", at.getAmount());
-            data.put("log", at.getLog());
-            Calendar c = Calendar.getInstance();
-            c.setTime(at.getCreatedAt());
-            data.put("created_at", c.get(Calendar.YEAR)+"-"+((c.get(Calendar.MONTH) < 10 ? "0" : "")+(c.get(Calendar.MONTH)+1))+"-"+c.get(Calendar.DAY_OF_MONTH)+" "+c.get(Calendar.HOUR)+":"+c.get(Calendar.MINUTE));
-            HashMap arg = new HashMap();
-            arg.put("data", data);
-            arg.put("type", "transaction");
-            obj.put("data", arg);
-            try {
-                /**
-                 * On envoie la notification à Firebase
-                 */
-                /// Object res = http.firebaseNotification(obj);
-                /**
-                 * ON envoie la notification par la WebSocket
-                 */
-                
-                Object res = WebSocketService.pushWebServiceNotification(obj);
-                
-                FileOutputStream logFirebase = new FileOutputStream("gateway_firebase_notification.txt", true);
-                logFirebase.write(("\n\nReponse Firebase >> "+(new Date())+" >>> "+res.toString()+"\n").getBytes());
-                logFirebase.write(("\n\nReponse Systeme >> "+(new Date())+" >>> "+obj.toString()+"\n").getBytes());
-                logFirebase.close();
-            }catch(Exception e){
-                
-            }
-            System.out.println("new AT = "+at.getId()+" AMOUNT = "+at.getAmount()+" PHONE = "+at.getTransactionId().getReceiverPhone()+" AGENT = "+at.getAgentPhone().getPhone());
-        });
-		IQueueWriter.newInstance(worker, writer);
-		System.out.println("Transaction activities initialized");
+	public TransactionResource(WorkSpaceService workSpaceService) {
+            this.worker = new IWorkerImpl<>(at -> {
+
+                WorkSpace workSpace = workSpaceService.save(at);
+
+                System.out.println("new\n\t->AT = "+at.getId()+"\n\t->AMOUNT = "+at.getAmount()+"\n\t->PHONE = "+at.getTransactionId().getReceiverPhone()+"\n\t->AGENT = "+at.getAgentPhone().getPhone()+"\n\t->WorkSpaceID = "+workSpace);
+            });
+            IQueueWriter.newInstance(worker, writer);
+            System.out.println("Transaction activities initialized");
 	}
 	
     /**
@@ -152,6 +126,17 @@ public class TransactionResource {
 		return res;
 	}
     
+        
+    
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+    @PostMapping("/a")
+	public Object newCommandes(@RequestBody List<Transactions> transac) {  
+            List<Object> t = new LinkedList();
+            transac.forEach((e) -> t.add(newCommande(e)));
+            
+            return t;
+        }
+        
 	@SuppressWarnings({ "unchecked", "rawtypes" })
     @PostMapping
 	public Object newCommande(@RequestBody Transactions transac) {  
@@ -204,17 +189,28 @@ public class TransactionResource {
 		}
 		
 		List<AutomateAgents> agents = new LinkedList<>();
-		ws.getMap().forEach((sessionId, pipeEntry) -> {
-			Object agent = ((HashMap<String, Object>)pipeEntry).get("agent");
-			if(! (agent.getClass().equals(String.class))) {
-				AutomateAgents agt = new AutomateAgents();
-				agt.setImei(((Map)agent).get("imei").toString());
-				//ObjectParser.parse("{\"imei\": \""+((Map)agent).get("imei")+"\"}", AutomateAgents.class);
-					Optional<AutomateAgents> optAgt = agentRepository.findByImei(agt.getImei());
-					if(optAgt.isPresent() && optAgt.get().getBalance() > transac.getAmount())
-						agents.add(optAgt.get());
-			} 
-		}); 
+                
+                System.out.println("\n\n############################ LOCK ON AGENT ##############");
+                agentListLock.lock();
+                try{
+                    ws.getMap().forEach((sessionId, pipeEntry) -> {
+                            Object agent = ((HashMap<String, Object>)pipeEntry).get("agent");
+                            if(! (agent.getClass().equals(String.class))) {
+                                    AutomateAgents agt = new AutomateAgents();
+                                    agt.setImei(((Map)agent).get("imei").toString());
+                                    //ObjectParser.parse("{\"imei\": \""+((Map)agent).get("imei")+"\"}", AutomateAgents.class);
+                                            agentRepository.findByImei(agt.getImei())
+                                            .ifPresent((ag) -> {
+                                                System.out.println("Agent = "+ag.getBalance()+" <=> "+transac.getAmount());
+                                                if(ag.getBalance() > transac.getAmount()) agents.add(ag);
+                                            });
+                            } 
+                    }); 
+                }finally{
+                    System.out.println("\n\n############################ UNLOCK ON AGENT ##############");
+                    agentListLock.unlock();
+                }
+                
 		
 		//System.out.println("\n\n>>>>>>Agents = "+agents);
 		
@@ -240,9 +236,9 @@ public class TransactionResource {
 					/**
                      * On exclus les agents offline
                      */
-                    agents.stream().filter((a) -> (a.getIs_online() == false)).forEachOrdered((a) -> {
-                        agents.remove(a);
-                    });
+//                    agents.stream().filter((a) -> (a.getIs_online() == false)).forEachOrdered((a) -> {
+//                        agents.remove(a);
+//                    });
                     
                     if(agents.size() > 0){
                         /**
@@ -325,17 +321,18 @@ public class TransactionResource {
 				}
 				return activity;
 			}
-			activity = transactionActivityRepository.save(activity);
+			final TransactionActivity acti = transactionActivityRepository.save(activity);
 			/**
 			 * On charge dans la pile d'exécution
 			 */
-			writer.add(activity);
+                        (new FutureTask<>(() -> { 
+                            writer.add(acti);
+                            return 0;
+                        })).run();
 
 			try { 
-				HashMap<String, Object> o = new HashMap<>();
-				o.put("activity", activity);
 				FileOutputStream logFirebase = new FileOutputStream("gateway_firebase_notification.txt", true);
-				logFirebase.write(("\n\nTransaction ajouté dans le fil de traitement >> "+(new Date())+" >>> Transaféré "+o.toString()).getBytes());
+				logFirebase.write(("\n\nTransaction ajouté dans le fil de traitement >> "+(new Date())+" >>> Transaféré "+acti.toString()).getBytes());
 				logFirebase.close();
 			}catch(Exception e){
 				
@@ -538,35 +535,31 @@ public class TransactionResource {
 			res.put("status", true);
 			res.put("message", "1000");
 			res.put("data", ta.toHashMap());
-			new Thread() {
-				public void run() {
-/*					try {
-						System.out.println(http.post(tb.getTransactionId().getUrl(), obj));
-					}catch(Exception e) {
-						
-					}
-*/
-					try{
-						Object response = http.post(tb.getTransactionId().getUrl(), obj);
+                        FutureTask<Integer> future = new FutureTask<Integer>(() -> {
+                            
+                                try{
+                                        Object response = http.post(tb.getTransactionId().getUrl(), obj);
 
-						System.out.println(
-						"\n**************** GATEWAY RESPONSE FROM CALL BACK **************\n\n"+
-						"\t\t>>>>>>>>URL: "+tb.getTransactionId().getUrl()+"\n\n"+
-						"\t\t>>>>>>>>Body: "+obj.toString()+"\n\n"+
-						"\t\t>>>>>>>>response = "+response+"\n\n"
-						);
-					}catch(Exception e){
+                                        System.out.println(
+                                        "\n**************** GATEWAY RESPONSE FROM CALL BACK **************\n\n"+
+                                        "\t\t>>>>>>>>URL: "+tb.getTransactionId().getUrl()+"\n\n"+
+                                        "\t\t>>>>>>>>Body: "+obj.toString()+"\n\n"+
+                                        "\t\t>>>>>>>>response = "+response+"\n\n"
+                                        );
+                                        return 0;
+                                }catch(Exception e){
 
-						System.out.println(
-						"\n\n********************* GATEWAY SENDING RESPONSE ERROR ****************\n\n"+
-						"\t\t>>>>>>>>URL: "+tb.getTransactionId().getUrl()+"\n\n"+
-						"\t\t>>>>>>>>Body: "+obj.toString()+"\n\n"+
-						"\t\t>>>>>>>>Error = "+e.getMessage()+"\n\n"+
-						"\t\t>>>>>>>>Trace = "+e.getCause()
-						);
-					}
-				}
-			}.start();
+                                        System.out.println(
+                                        "\n\n********************* GATEWAY SENDING RESPONSE ERROR ****************\n\n"+
+                                        "\t\t>>>>>>>>URL: "+tb.getTransactionId().getUrl()+"\n\n"+
+                                        "\t\t>>>>>>>>Body: "+obj.toString()+"\n\n"+
+                                        "\t\t>>>>>>>>Error = "+e.getMessage()+"\n\n"+
+                                        "\t\t>>>>>>>>Trace = "+e.getCause()
+                                        );
+                                }
+                                return -1;
+                        });
+                        future.run();
 			return res;
 		}
 
@@ -600,7 +593,7 @@ public class TransactionResource {
 		ws.getMap().forEach((sessionId, pipeEntry) -> {
 			HashMap<String, Object> m = new HashMap<>();
 			m.put("agent", ((HashMap<String, Object>)pipeEntry).get("agent"));
-			m.put("pipe", ((WebSocketSession)((HashMap<String, Object>)pipeEntry).get("pipe")).getHandshakeHeaders());
+			m.put("pipe", ((HashMap<String, Object>)pipeEntry).get("pipe"));
 			k.add(m);
 		});
 		

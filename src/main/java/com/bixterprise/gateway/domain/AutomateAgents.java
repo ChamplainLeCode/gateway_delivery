@@ -29,7 +29,9 @@ import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlTransient;
 
 import com.bixterprise.gateway.domain.enums.AgentStatus;
+import com.bixterprise.gateway.utils.PhoneOperator;
 import java.util.HashMap;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -37,6 +39,7 @@ import java.util.HashMap;
  */
 @Entity
 @Table(name = "automate_agents")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "AutomateAgents.findAll", query = "SELECT a FROM AutomateAgents a")})
 public class AutomateAgents implements Serializable {
@@ -71,8 +74,9 @@ public class AutomateAgents implements Serializable {
     private Set<AgentActivity> agentActivitySet;
     @Transient
     String log;
+    @Enumerated(EnumType.STRING)
     @Column(name="phoneOperator")
-    private String phoneOperator;
+    private PhoneOperator phoneOperator;
     
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = " Varchar(20) default \"ACTIVATE\"") 
@@ -201,15 +205,23 @@ public class AutomateAgents implements Serializable {
         return true;
     }
 
-    public void setPhoneOperator(String operator) {
+    public void setPhoneOperator(PhoneOperator operator) {
         this.phoneOperator = operator;
     }
-    public String getPhoneOperator() {
+    public PhoneOperator getPhoneOperator() {
         return this.phoneOperator;
     }
     
+    public boolean isMTN() {
+        return this.phoneOperator != null && this.phoneOperator == PhoneOperator.MTN;
+    }
     
-	public Object toJSONString() {
+    public boolean isOrange() {
+        return this.phoneOperator != null && this.phoneOperator == PhoneOperator.ORANGE;
+    }
+    
+    
+	public HashMap toJSONString() {
                 HashMap<String, Object> obj = new HashMap();
 		obj.put("phone", phone);
 		obj.put("imei", imei);

@@ -25,7 +25,7 @@ public class OperatorResolver {
         String spn = removeCountryCode(phoneNumber);
         agents
             .stream()
-            .filter((a) -> (a.getPhoneOperator().equalsIgnoreCase(identifyNetwork(spn).toString())))
+            .filter((a) -> (a.getPhoneOperator().name.equalsIgnoreCase(identifyNetwork(spn).toString())))
             .forEachOrdered((a) -> {
                 result.add(a);
             });

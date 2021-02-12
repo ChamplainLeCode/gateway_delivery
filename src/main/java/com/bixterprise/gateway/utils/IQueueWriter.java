@@ -20,7 +20,7 @@ public class IQueueWriter<E> implements GatewayInteface.IAddable<E>{
 
 
 	public static <T> void newInstance(IWorkerImpl<T> worker, IQueueWriter<T> writer) {
-		IQueue<T> queue =  new IQueue<T>(worker); 
+		IQueue<T> queue =  new IQueue<>(worker); 
 		writer.setQueue(queue);
 		worker.setQueue(queue);
 		writer.setAddable((T t)->{

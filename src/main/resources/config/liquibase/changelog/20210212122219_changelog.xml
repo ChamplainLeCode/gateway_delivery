@@ -1,0 +1,173 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.9.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+    <changeSet author="champlain (generated)" id="1613132544144-1">
+        <createTable tableName="agent_activity">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="agent_activityPK"/>
+            </column>
+            <column name="context" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="datetime(6)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="log" type="LONGTEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="agent" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="champlain (generated)" id="1613132544144-2">
+        <createTable tableName="agent_messages">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="agent_messagesPK"/>
+            </column>
+            <column name="date" type="datetime(6)"/>
+            <column name="message" type="VARCHAR(255)"/>
+            <column name="agent_phone" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="champlain (generated)" id="1613132544144-3">
+        <createTable tableName="agent_transaction">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="agent_transactionPK"/>
+            </column>
+            <column name="amount" type="FLOAT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="datetime(6)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="LONGTEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="agent_phone" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="champlain (generated)" id="1613132544144-4">
+        <createTable tableName="agents_activation">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="agents_activationPK"/>
+            </column>
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reason" type="VARCHAR(255)"/>
+            <column name="status" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="agents" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="champlain (generated)" id="1613132544144-5">
+        <createTable tableName="automate_agents">
+            <column name="phone" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="automate_agentsPK"/>
+            </column>
+            <column name="created_at" type="datetime(6)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="token" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="imei" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_online" type="BIT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone_operator" type="VARCHAR(255)"/>
+            <column defaultValueNumeric="0" name="solde" type="BIGINT not null"/>
+            <column defaultValue="&quot;ACTIVATE&quot;" name="status" type="VARCHAR(20)"/>
+            <column name="updated_at" type="datetime(6)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="champlain (generated)" id="1613132544144-6">
+        <createTable tableName="transaction_activity">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="transaction_activityPK"/>
+            </column>
+            <column name="amount" type="FLOAT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="datetime(6)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="log" type="LONGTEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="datetime(6)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="agent_phone" type="VARCHAR(255)"/>
+            <column name="transaction_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="champlain (generated)" id="1613132544144-7">
+        <createTable tableName="transactions">
+            <column name="id" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="transactionsPK"/>
+            </column>
+            <column name="amount" type="FLOAT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="datetime(6)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="receiver_phone" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="url" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="champlain (generated)" id="1613132544144-8">
+        <createTable tableName="workspace">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="workspacePK"/>
+            </column>
+            <column name="hop" type="INT"/>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="activity_id" type="BIGINT"/>
+            <column name="agent_phone" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="champlain (generated)" id="1613132544144-9">
+        <addForeignKeyConstraint baseColumnNames="transaction_id" baseTableName="transaction_activity" constraintName="FK1o7g9uk1cjlipylutcshbf7dt" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="transactions" validate="true"/>
+    </changeSet>
+    <changeSet author="champlain (generated)" id="1613132544144-10">
+        <addForeignKeyConstraint baseColumnNames="agent_phone" baseTableName="agent_messages" constraintName="FK2dl3nd0uk25jqxuxpvlm1a0cp" deferrable="false" initiallyDeferred="false" referencedColumnNames="phone" referencedTableName="automate_agents" validate="true"/>
+    </changeSet>
+    <changeSet author="champlain (generated)" id="1613132544144-11">
+        <addForeignKeyConstraint baseColumnNames="agent_phone" baseTableName="agent_transaction" constraintName="FK39gtfuvx2kufplbakf75j66d8" deferrable="false" initiallyDeferred="false" referencedColumnNames="phone" referencedTableName="automate_agents" validate="true"/>
+    </changeSet>
+    <changeSet author="champlain (generated)" id="1613132544144-12">
+        <addForeignKeyConstraint baseColumnNames="agent" baseTableName="agent_activity" constraintName="FKf4q3qb1j5ekrd02geughsy9r0" deferrable="false" initiallyDeferred="false" referencedColumnNames="phone" referencedTableName="automate_agents" validate="true"/>
+    </changeSet>
+    <changeSet author="champlain (generated)" id="1613132544144-13">
+        <addForeignKeyConstraint baseColumnNames="agent_phone" baseTableName="workspace" constraintName="FKhia9aufgtlowu9jatiruwn8xs" deferrable="false" initiallyDeferred="false" referencedColumnNames="phone" referencedTableName="automate_agents" validate="true"/>
+    </changeSet>
+    <changeSet author="champlain (generated)" id="1613132544144-14">
+        <addForeignKeyConstraint baseColumnNames="agents" baseTableName="agents_activation" constraintName="FKk6x70aagm674odwfpg3xe3ear" deferrable="false" initiallyDeferred="false" referencedColumnNames="phone" referencedTableName="automate_agents" validate="true"/>
+    </changeSet>
+    <changeSet author="champlain (generated)" id="1613132544144-15">
+        <addForeignKeyConstraint baseColumnNames="agent_phone" baseTableName="transaction_activity" constraintName="FKocowprmlqlsblw6ykt3s9hgm4" deferrable="false" initiallyDeferred="false" referencedColumnNames="phone" referencedTableName="automate_agents" validate="true"/>
+    </changeSet>
+    <changeSet author="champlain (generated)" id="1613132544144-16">
+        <addForeignKeyConstraint baseColumnNames="activity_id" baseTableName="workspace" constraintName="FKsc6k476jv7uikoupip64p5fuk" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="transaction_activity" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

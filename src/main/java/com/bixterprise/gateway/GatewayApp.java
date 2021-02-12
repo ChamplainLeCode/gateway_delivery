@@ -16,6 +16,7 @@ import org.springframework.core.env.Environment;
 
 import javax.annotation.PostConstruct;
 import java.net.InetAddress;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Collection;
@@ -57,13 +58,14 @@ public class GatewayApp {
      *
      * @param args the command line arguments.
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws URISyntaxException {
         SpringApplication app = new SpringApplication(GatewayApp.class);
         DefaultProfileUtil.addDefaultProfile(app);
         Environment env = app.run(args).getEnvironment();
         logApplicationStartup(env);
     }
-
+    
+    
     private static void logApplicationStartup(Environment env) {
         String protocol = "http";
         if (env.getProperty("server.ssl.key-store") != null) {

@@ -2,8 +2,22 @@ package com.bixterprise.gateway.websocket.messages;
 
 public enum MessageType {
 	
-	LOGIN("login"), LOGOUT("logout"), NOTIFY("notify"), UPDATE("update"), PING("ping"), PONG("pong");
-	
+	LOGIN("login"), 
+        LOGOUT("logout"), 
+        NOTIFY("notify"), 
+        UPDATE("update"), 
+        PING("ping"), PONG("pong"), 
+        NEXT("next"), NEXT_RECEIVED("next_received"),
+	ORANGE_THREAD_STARTED("start/process/orange/started"),
+        MTN_THREAD_STARTED("start/process/mtn/started"),
+	ORANGE_THREAD_STOPED("stop/process/orange/stoped"),
+        MTN_THREAD_STOPED("stop/process/mtn/stoped"),
+	ORANGE_THREAD_STOP("stop/process/orange"),
+        MTN_THREAD_STOP("stop/process/mtn"),
+        ASK_COMMAND_FOR_ORANGE("command/for/orange"),
+        ASK_COMMAND_FOR_MTN("command/for/mtn"),
+        COMMAND_FOR_RECEIVED("command/received");
+        
 	public final String value;
 	
 	MessageType(String value){

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+ <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -289,10 +289,7 @@
             <version>1.1.6</version>
         </dependency>
 
-        <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-websocket</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
@@ -302,6 +299,11 @@
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-util</artifactId>
             <version>10.0.2</version>
+        </dependency>
+        <dependency>
+              <groupId>io.socket</groupId>
+              <artifactId>socket.io-client</artifactId>
+              <version>2.0.0</version>
         </dependency>
 
     </dependencies>
@@ -599,10 +601,10 @@
                         <changeLogFile>${project.basedir}/src/main/resources/config/liquibase/master.xml</changeLogFile>
                         <diffChangeLogFile>${project.basedir}/src/main/resources/config/liquibase/changelog/${maven.build.timestamp}_changelog.xml</diffChangeLogFile>
                         <driver>com.mysql.cj.jdbc.Driver</driver>
-                        <url>jdbc:mysql://localhost:3306/gateway</url>
+                        <url>jdbc:mysql://localhost:3306/gateway?serverTimezone=UTC</url>
                         <defaultSchemaName>gateway</defaultSchemaName>
-                        <username>root</username>
-                        <password></password>
+                        <username>sprintpay</username>
+                        <password>sprintpay</password>
                         <referenceUrl>hibernate:spring:com.bixterprise.gateway.domain?dialect=org.hibernate.dialect.MySQL8Dialect&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
                         <verbose>true</verbose>
                         <logging>debug</logging>

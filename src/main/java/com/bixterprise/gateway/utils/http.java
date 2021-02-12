@@ -195,7 +195,7 @@ public class http {
                 OperatorResolver.removeCountryCode(
                     a.getPhone()
                 )
-            ).toString()
+            )
         );
     }
     
@@ -206,45 +206,49 @@ public class http {
      * @return PhoneOperator
      * @see PhoneOperator
      */
-    public static PhoneOperator getPhoneOperator(String phoneNumber){
-        try {
-            URL http = new URL("https://searchmobilenumber.com/info/"+phoneNumber+"-CM");
-            HttpURLConnection connection = (HttpURLConnection) http.openConnection();
-            connection.setRequestProperty("Content-Type", 
-                    "application/x-www-form-urlencoded");
-	         connection.setRequestProperty("Content-Language", "en-US"); 
-	         connection.setRequestProperty("User-Agent",
-                 "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11");
-
-            connection.setRequestMethod("GET");
-            connection.setDoOutput(true);
-
-            
-            try(BufferedReader br = new BufferedReader(
-                new InputStreamReader(connection.getInputStream(), "utf-8"))) {
-                  StringBuilder response = new StringBuilder();
-                  String responseLine;
-                  while ((responseLine = br.readLine()) != null) {
-                      response.append(responseLine.trim());
-                  }
-                  if(response.indexOf(PhoneOperator.MTN.toString())>=0){
-                      return PhoneOperator.MTN;
-                  }else if(response.indexOf(PhoneOperator.ORANGE.toString())>=0){
-                      return PhoneOperator.ORANGE;
-                  }else if(response.indexOf(PhoneOperator.NEXTTEL.toString())>=0){
-                      return PhoneOperator.NEXTTEL;
-                  }else
-                      return defaultPhoneOperatorScript(phoneNumber);
-            }catch(Exception e) {
-            	e.printStackTrace();
-            	return defaultPhoneOperatorScript(phoneNumber);
-            }
-        }catch(IOException  e){
-            e.printStackTrace();
-            return defaultPhoneOperatorScript(phoneNumber);
-        }
-    
+    public static PhoneOperator getPhoneOperator (String phoneNumber) {
+        return defaultPhoneOperatorScript(phoneNumber);
     }
+    
+//    {
+//        try {
+//            URL http = new URL("https://searchmobilenumber.com/info/"+phoneNumber+"-CM");
+//            HttpURLConnection connection = (HttpURLConnection) http.openConnection();
+//            connection.setRequestProperty("Content-Type", 
+//                    "application/x-www-form-urlencoded");
+//	         connection.setRequestProperty("Content-Language", "en-US"); 
+//	         connection.setRequestProperty("User-Agent",
+//                 "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11");
+//
+//            connection.setRequestMethod("GET");
+//            connection.setDoOutput(true);
+//
+//            
+//            try(BufferedReader br = new BufferedReader(
+//                new InputStreamReader(connection.getInputStream(), "utf-8"))) {
+//                  StringBuilder response = new StringBuilder();
+//                  String responseLine;
+//                  while ((responseLine = br.readLine()) != null) {
+//                      response.append(responseLine.trim());
+//                  }
+//                  if(response.indexOf(PhoneOperator.MTN.toString())>=0){
+//                      return PhoneOperator.MTN;
+//                  }else if(response.indexOf(PhoneOperator.ORANGE.toString())>=0){
+//                      return PhoneOperator.ORANGE;
+//                  }else if(response.indexOf(PhoneOperator.NEXTTEL.toString())>=0){
+//                      return PhoneOperator.NEXTTEL;
+//                  }else
+//                      return defaultPhoneOperatorScript(phoneNumber);
+//            }catch(Exception e) {
+//            	e.printStackTrace();
+//            	return defaultPhoneOperatorScript(phoneNumber);
+//            }
+//        }catch(IOException  e){
+//            e.printStackTrace();
+//            return defaultPhoneOperatorScript(phoneNumber);
+//        }
+//    
+//    }
     
     /**
      * In case where we could'n check phone operator through getPhoneOperator() method, 

@@ -220,19 +220,7 @@ public class AgentsResource {
 				res.put("message", 1001);
 				res.put("errors", obj);
 				return res;
-			} 
-			/*
-			if(loggedUser.getIs_online() == true) {
-				HashMap obj = new HashMap();
-				obj.put("code", "101");
-				obj.put("label", "Agent already connected");
-				HashMap res = new HashMap();
-				res.put("status", false);
-				res.put("message", 1001);
-				res.put("errors", obj);
-				return res;
 			}
-			*/
 			loggedUser.setFcm_token(a.getFcm_token());
 			loggedUser.setIsOnline(true);
 			loggedUser.setUpdatedAt(Calendar.getInstance().getTime());

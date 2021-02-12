@@ -31,7 +31,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final JHipsterProperties jHipsterProperties;
 
-    private final RememberMeServices rememberMeServices;
+//    private final RememberMeServices rememberMeServices;
 
     private final CorsFilter corsFilter;
     private final SecurityProblemSupport problemSupport;
@@ -43,9 +43,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected String GTPassword;
 
 
-    public SecurityConfiguration(JHipsterProperties jHipsterProperties, RememberMeServices rememberMeServices, CorsFilter corsFilter, SecurityProblemSupport problemSupport) {
+    public SecurityConfiguration(JHipsterProperties jHipsterProperties, 
+//            RememberMeServices rememberMeServices, 
+            CorsFilter corsFilter, SecurityProblemSupport problemSupport) {
         this.jHipsterProperties = jHipsterProperties;
-        this.rememberMeServices = rememberMeServices;
+//        this.rememberMeServices = rememberMeServices;
         this.corsFilter = corsFilter;
         this.problemSupport = problemSupport;
     }

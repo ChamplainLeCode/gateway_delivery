@@ -52,7 +52,7 @@ spring:
     show-sql: true
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
-    contexts: dev, faker
+    contexts: dev
   mail:
     host: localhost
     port: 25
@@ -122,3 +122,8 @@ sp:
     user:
       username: $2y$12$NaoI.dnnFRYdSFu/WYYB1e5unpGz1ApjmnnNEmTmRZNHSkQ5Y3.uK
       password: $2y$12$l/AI5nVa38TMJJvRmHH8F.VPe8zPsTSgiR/NQwymlg4mCRK9TyN4S
+
+microservice:
+  deliverer:
+    url: http://localhost:3000/server
+    login:
