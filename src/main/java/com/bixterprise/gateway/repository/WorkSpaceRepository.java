@@ -5,6 +5,7 @@
  */
 package com.bixterprise.gateway.repository;
 
+import com.bixterprise.gateway.domain.TransactionActivity;
 import com.bixterprise.gateway.domain.WorkSpace;
 import com.bixterprise.gateway.utils.PhoneOperator;
 import org.springframework.data.domain.Page;
@@ -24,6 +25,8 @@ public interface WorkSpaceRepository extends JpaRepository<WorkSpace, Long> {
 
     @Query("select ws from WorkSpace ws join TransactionActivity ta on ws.activity = ta join AutomateAgents ag on ta.agentPhone = ag and ag.phoneOperator = :operateur")
     public Page<WorkSpace> findOneByAgentPhoneOperator(@Param("operateur") PhoneOperator operateur, Pageable pageable);
+
+    public WorkSpace findByActivity(TransactionActivity ta);
 
     
 }

@@ -10,7 +10,8 @@ package com.bixterprise.gateway.utils;
  * @author haranov
  */
 public enum TransactionStatus {
-	PENDING("PENDING"), RUNNING("RUNNING"),  FAILURE("FAILURE"), COMPLETE("COMPLETE"), ABORT("ABORT");
+	PENDING("PENDING"), RUNNING("RUNNING"),  FAILURE("FAILURE"), COMPLETE("COMPLETE"), ABORT("ABORT"),
+        NO_RESPONSE("UNKNOW");
 	String code;
 	
 	TransactionStatus(String code){

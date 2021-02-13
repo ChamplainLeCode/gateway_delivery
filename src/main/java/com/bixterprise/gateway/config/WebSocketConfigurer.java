@@ -48,10 +48,9 @@ public class WebSocketConfigurer {
     public boolean status(@Qualifier("gatewayDeliverer") Socket socket, WebSocketService service){
         log.info("\n\n#########################################################\n###  Configuring Messages with GatewayDeliverer START\n#########################################################");
         Emitter on = socket
+                .on(MessageType.SERVER_DISCONNECTED.value, service::serverDisconnected)
                 .on(MessageType.LOGIN.value, service::onAgentLogin)
                 .on(MessageType.LOGOUT.value, service::onAgentLogout)
-                .on(MessageType.NOTIFY.value, service::onTransactionReceive)
-                .on(MessageType.UPDATE.value, service::onTransactionUpdate)
                 .on(MessageType.NEXT.value, service::onTransactionGetNextCommand)
                 .on(MessageType.NEXT_RECEIVED.value, service::onTransactionGetNextCommandReceived)
                 .on(MessageType.ORANGE_THREAD_STARTED.value, service::onOrangeThreadStarted)
@@ -60,7 +59,9 @@ public class WebSocketConfigurer {
                 .on(MessageType.MTN_THREAD_STOPED.value, service::onMtnThreadStoped)
                 .on(MessageType.ASK_COMMAND_FOR_ORANGE.value, service::onAskCommandForOrange)
                 .on(MessageType.ASK_COMMAND_FOR_MTN.value, service::onAskCommandForMtn)
-                .on(MessageType.COMMAND_FOR_RECEIVED.value, service::onCommandForReceived);
+                .on(MessageType.COMMAND_FOR_RECEIVED.value, service::onCommandForReceived)
+                .on(MessageType.NOTIFY.value, service::onTransactionReceive)
+                .on(MessageType.UPDATE.value, service::onTransactionUpdate);
                 
         log.info("\n\n#########################################################\n###  Connecting Messages with GatewayDeliverer END\n#########################################################");
         return true;

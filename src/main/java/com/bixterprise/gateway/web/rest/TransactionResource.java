@@ -21,6 +21,8 @@ import com.bixterprise.gateway.repository.AgentRepository;
 import com.bixterprise.gateway.repository.AgentTransactionRepository;
 import com.bixterprise.gateway.repository.TransactionActivityRepository;
 import com.bixterprise.gateway.repository.TransactionRepository;
+import com.bixterprise.gateway.repository.WorkSpaceRepository;
+
 import com.bixterprise.gateway.domain.AgentTransaction;
 import com.bixterprise.gateway.domain.AutomateAgents;
 import com.bixterprise.gateway.domain.TransactionActivity;
@@ -35,8 +37,11 @@ import com.bixterprise.gateway.utils.TransactionStatus;
 import com.bixterprise.gateway.utils.http;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.locks.Lock;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 @CrossOrigin(origins = "*")
@@ -47,7 +52,10 @@ public class TransactionResource {
 	
 	IWorkerImpl<TransactionActivity> worker;
 	IQueueWriter<TransactionActivity> writer = new IQueueWriter<>();
-	
+	Logger log = LoggerFactory.getLogger(TransactionResource.class);
+        
+        @Autowired @Qualifier("gatewayAgentListLock") Lock agentLocker;
+        
 	@Autowired
 	AgentRepository agentRepository;
 	
@@ -60,7 +68,10 @@ public class TransactionResource {
 	@Autowired
 	AgentTransactionRepository agentTransactionRepository;
 
-	@Autowired WebSocketService ws;
+        @Autowired
+        WorkSpaceRepository workSpaceDB;
+        
+        @Autowired WebSocketService ws;
         
         @Autowired @Qualifier("gatewayAgentListLock") Lock agentListLock;
         
@@ -456,8 +467,7 @@ public class TransactionResource {
 
 	@PostMapping("/notify-transaction-receive")
 	public HashMap CommandReceptionReport(@RequestBody TransactionActivity activ) {
-		Optional<TransactionActivity> fetch = transactionActivityRepository.findById(activ.getId());
-		TransactionActivity ta = fetch.isPresent() ? fetch.get() : null;
+		TransactionActivity ta = transactionActivityRepository.findById(activ.getId()).orElse(null);
 		
 
 		System.out.println(
@@ -468,7 +478,13 @@ public class TransactionResource {
 		
 		if(ta != null) {
 			ta.setStatus(TransactionStatus.RUNNING.toString());
+                        ta.setLog(ta.getLog()+LOG_SEPARATOR+"Transaction reçue par le mobile");
 			ta = transactionActivityRepository.save(ta);
+                        WorkSpace workSpace = workSpaceDB.findByActivity(ta);
+                        if(workSpace != null){
+                            workSpace.setStatus(TransactionStatus.RUNNING);
+                            workSpaceDB.save(workSpace);
+                        }
 			HashMap res = new HashMap();
 			res.put("status", true);
 			res.put("message", "1000");
@@ -493,8 +509,8 @@ public class TransactionResource {
 
 	@PostMapping("/update-transaction")
 	public HashMap CommandComplete(@RequestBody TransactionActivity activ)  {
-		Optional<TransactionActivity> fetch = transactionActivityRepository.findById(activ.getId());
-		TransactionActivity ta = fetch.isPresent() ? fetch.get() : null;
+		TransactionActivity ta = transactionActivityRepository.findById(activ.getId()).orElse(null);
+                
 		if(ta != null) {
 			/**
 			 * On met à jour le status de la transation qui peut être
@@ -515,7 +531,7 @@ public class TransactionResource {
 			/**
 			 * CREATION DE LA TRANSACTION AGENT EN CAS DE TRANSACTION COMPLETE
 			 */
-			if(ta.getStatus() == TransactionStatus.COMPLETE.toString()) {
+			if(ta.getStatus() == null ? TransactionStatus.COMPLETE.toString() == null : ta.getStatus().equals(TransactionStatus.COMPLETE.toString())) {
 				obj.put("status", "100");
 				ta.setUpdatedAt(Calendar.getInstance().getTime());
 				AgentTransaction at = new AgentTransaction();
@@ -529,8 +545,30 @@ public class TransactionResource {
 				ta.getAgentPhone().setSolde(ta.getAgentPhone().getBalance()-ta.getAmount());
 				agentTransactionRepository.save(at);
 				agentRepository.save(ta.getAgentPhone());
+                                agentLocker.lock();
+                                try{
+                                    System.out.println("\n\n############################ AGENT UNLOCK ON  UPDATE TRANSACTION RESOURCE ##############");
+                                    for (String key : ws.getMap().keySet()) {                                        
+                                        HashMap<String, Object> entry = HashMap.class.cast(ws.getMap().get(key));
+                                        HashMap<String, Object> agent = HashMap.class.cast(entry.get("agent"));
+                                        if(agent.get("phone").toString().equals(ta.getAgentPhone().getPhone())){
+                                            agent.put("balance", ta.getAgentPhone().getBalance());
+                                            break;
+                                        }
+                                    }
+                                }finally{
+                                    System.out.println("\n\n############################ AGENT UNLOCK ON  UPDATE TRANSACTION RESOURCE ##############");
+                                    agentLocker.unlock();
+                                }
 			}
 			TransactionActivity tb = transactionActivityRepository.save(ta);
+                        
+                        /**
+                         * On retire le job dans le workspace car on a un retour sur lui
+                         */
+                            WorkSpace workspace = workSpaceDB.findByActivity(ta);
+                            if(workspace != null)
+                                workSpaceDB.delete(workspace);
 			HashMap res = new HashMap();
 			res.put("status", true);
 			res.put("message", "1000");
@@ -590,12 +628,19 @@ public class TransactionResource {
 	@RequestMapping("/online")
 	public Object activeUser() {
 		LinkedList<HashMap> k = new LinkedList<>();
-		ws.getMap().forEach((sessionId, pipeEntry) -> {
-			HashMap<String, Object> m = new HashMap<>();
-			m.put("agent", ((HashMap<String, Object>)pipeEntry).get("agent"));
-			m.put("pipe", ((HashMap<String, Object>)pipeEntry).get("pipe"));
-			k.add(m);
-		});
+                log.debug("\n\n############################ AGENT LOCK ON ONLINE RESOURCE ##############");
+                agentLocker.lock();
+                try{
+                    ws.getMap().forEach((sessionId, pipeEntry) -> {
+                            HashMap<String, Object> m = new HashMap<>();
+                            m.put("agent", ((HashMap<String, Object>)pipeEntry).get("agent"));
+                            m.put("pipe", ((HashMap<String, Object>)pipeEntry).get("pipe"));
+                            k.add(m);
+                    });
+                }finally{
+                    System.out.println("\n\n############################ AGENT UNLOCK ON  ONLINE RESOURCE ##############");
+                    agentLocker.unlock();
+                }
 		
 		return k;
 	}

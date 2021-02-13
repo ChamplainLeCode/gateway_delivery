@@ -17,8 +17,12 @@ import java.util.Date;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.concurrent.locks.Lock;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.logging.LogFactory;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.mapstruct.ap.internal.util.Collections;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -262,12 +266,46 @@ public class WebSocketService  {
         
     }
 
-    public void onTransactionUpdate(Object[] os) {
-
+    /**
+     *
+     * L'update désigne le status final de traitement de la transaction par le mobile
+     * et donc il envoie l'identifiant de la transaction reçue, le status de la transaction 
+     * et le message (log) renvoyé par l'opérateur
+     * on transfert ces données au serveur de la gateway
+     * @param params
+     */
+    public void onTransactionUpdate(Object...params) {
+        if(params != null && params.length > 0){
+            for(Object entry : params){
+                try {
+                    TransactionActivity ta = new TransactionActivity();
+                    JSONObject m = JSONObject.class.cast(entry);
+                    ta.setId(m.getLong("transaction"));
+                    ta.setLog(m.getString("log"));
+                    ta.setStatus(m.getString("status"));
+                    transactionRestController.CommandComplete(ta);
+                } catch (JSONException ex) {
+                    Logger.getLogger(WebSocketService.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
     }
 
-    public void onTransactionReceive(Object[] os) {
-
+    /**
+     * This function is called when Phone has successfully received transaction
+     * and send back reception delivery
+     * @param receptionDeliveries
+     */
+    public void onTransactionReceive(Object...receptionDeliveries) {
+        
+        if(receptionDeliveries != null && receptionDeliveries.length > 0)
+            for(Object id : receptionDeliveries){
+                TransactionActivity ta = new TransactionActivity(Long.parseLong(id+""));
+                    HashMap rest = transactionRestController.CommandReceptionReport(ta);
+//                    rest.put("type", "notify");
+//                    session.sendMessage(new TextMessage(rest.toString().getBytes()));
+            }
+        
     }
 //	 
 
@@ -335,6 +373,13 @@ public class WebSocketService  {
                 workSpaceService.updateWorkSpaceReceived(new Long(id+""));
             }
         }
+    }
+
+    public void serverDisconnected(Object[] os) {
+        System.out.println("\n\n##################### SERVER DISCONNECTED TO DELIVERER ################\n");
+            onOrangeThreadStoped(os);
+            onMtnThreadStoped(os);
+        System.out.println("\n\n##################### SERVER DISCONNECTED TO DELIVERER ################\n");
     }
     
 }

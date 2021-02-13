@@ -518,3 +518,230 @@ Reponse Systeme >> Fri Feb 12 15:16:38 WAT 2021 >>> {collapse_key=type_a, worksp
 
 
 Reponse Systeme >> Fri Feb 12 15:16:48 WAT 2021 >>> {collapse_key=type_a, workspace=17, data={data={transaction_id=ref_000000000043, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃ©ration, automate_agent_phone=698128155, created_at=2021-02-12 3:10, id=17, status=PENDING}, type=transaction}, to=y_iWHzavkcZa_0w9AAAa, operator=Orange}
+
+
+Reception d'une commande  >> Sat Feb 13 10:48:40 WAT 2021 >>> {amount=11000.0, receiver=698788449, transaction=gateway.models.Transactions[ id=ref_00000000010 ]}
+
+Transaction ajouté dans le fil de traitement >> Sat Feb 13 10:48:40 WAT 2021 >>> Transaféré gateway.models.TransactionActivity[ id=24 ]
+
+Reponse Systeme >> Sat Feb 13 10:48:50 WAT 2021 >>> {collapse_key=type_a, workspace=1, data={data={transaction_id=ref_00000000010, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃ©ration, automate_agent_phone=698128155, created_at=2021-02-13 10:48, id=24, status=PENDING}, type=transaction}, to=MySEED6CnDatw68rAAAD, operator=Orange}
+
+
+Reception d'une commande  >> Sat Feb 13 10:49:51 WAT 2021 >>> {amount=11000.0, receiver=698788449, transaction=gateway.models.Transactions[ id=ref_00000000011 ]}
+
+Transaction ajouté dans le fil de traitement >> Sat Feb 13 10:49:52 WAT 2021 >>> Transaféré gateway.models.TransactionActivity[ id=25 ]
+
+Reception d'une commande  >> Sat Feb 13 10:50:50 WAT 2021 >>> {amount=11000.0, receiver=698788449, transaction=gateway.models.Transactions[ id=ref_00000000012 ]}
+
+Reception d'une commande  >> Sat Feb 13 10:51:10 WAT 2021 >>> {amount=11000.0, receiver=698788449, transaction=gateway.models.Transactions[ id=ref_00000000013 ]}
+
+Transaction ajouté dans le fil de traitement >> Sat Feb 13 10:51:10 WAT 2021 >>> Transaféré gateway.models.TransactionActivity[ id=26 ]
+
+Reponse Systeme >> Sat Feb 13 10:51:20 WAT 2021 >>> {collapse_key=type_a, workspace=2, data={data={transaction_id=ref_00000000011, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃ©ration, automate_agent_phone=698128155, created_at=2021-02-13 10:49, id=25, status=PENDING}, type=transaction}, to=P2jAee5RzQN2U8FhAAAH, operator=Orange}
+
+
+Reception d'une commande  >> Sat Feb 13 10:59:02 WAT 2021 >>> {amount=11000.0, receiver=698788449, transaction=gateway.models.Transactions[ id=ref_00000000014 ]}
+
+Transaction ajouté dans le fil de traitement >> Sat Feb 13 10:59:02 WAT 2021 >>> Transaféré gateway.models.TransactionActivity[ id=27 ]
+
+Reponse Systeme >> Sat Feb 13 10:59:12 WAT 2021 >>> {collapse_key=type_a, workspace=3, data={data={transaction_id=ref_00000000013, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃ©ration, automate_agent_phone=698128155, created_at=2021-02-13 10:51, id=26, status=PENDING}, type=transaction}, to=4bFokH66xyYdFMI_AAAE, operator=Orange}
+
+
+Reponse Systeme >> Sat Feb 13 10:59:22 WAT 2021 >>> {collapse_key=type_a, workspace=4, data={data={transaction_id=ref_00000000014, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃ©ration, automate_agent_phone=698128155, created_at=2021-02-13 10:59, id=27, status=PENDING}, type=transaction}, to=4bFokH66xyYdFMI_AAAE, operator=Orange}
+
+
+Reponse Systeme >> Sat Feb 13 10:59:32 WAT 2021 >>> {collapse_key=type_a, workspace=1, data={data={transaction_id=ref_00000000010, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃ©ration, automate_agent_phone=698128155, created_at=2021-02-13 10:48, id=24, status=PENDING}, type=transaction}, to=4bFokH66xyYdFMI_AAAE, operator=Orange}
+
+
+Reponse Systeme >> Sat Feb 13 10:59:42 WAT 2021 >>> {collapse_key=type_a, workspace=2, data={data={transaction_id=ref_00000000011, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃ©ration, automate_agent_phone=698128155, created_at=2021-02-13 10:49, id=25, status=PENDING}, type=transaction}, to=4bFokH66xyYdFMI_AAAE, operator=Orange}
+
+
+Reponse Systeme >> Sat Feb 13 10:59:52 WAT 2021 >>> {collapse_key=type_a, workspace=3, data={data={transaction_id=ref_00000000013, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃ©ration, automate_agent_phone=698128155, created_at=2021-02-13 10:51, id=26, status=PENDING}, type=transaction}, to=4bFokH66xyYdFMI_AAAE, operator=Orange}
+
+
+Reponse Systeme >> Sat Feb 13 11:00:02 WAT 2021 >>> {collapse_key=type_a, workspace=4, data={data={transaction_id=ref_00000000014, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃ©ration, automate_agent_phone=698128155, created_at=2021-02-13 10:59, id=27, status=PENDING}, type=transaction}, to=4bFokH66xyYdFMI_AAAE, operator=Orange}
+
+
+Reponse Systeme >> Sat Feb 13 11:00:12 WAT 2021 >>> {collapse_key=type_a, workspace=1, data={data={transaction_id=ref_00000000010, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃ©ration, automate_agent_phone=698128155, created_at=2021-02-13 10:48, id=24, status=PENDING}, type=transaction}, to=4bFokH66xyYdFMI_AAAE, operator=Orange}
+
+
+Reponse Systeme >> Sat Feb 13 11:00:22 WAT 2021 >>> {collapse_key=type_a, workspace=2, data={data={transaction_id=ref_00000000011, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃ©ration, automate_agent_phone=698128155, created_at=2021-02-13 10:49, id=25, status=PENDING}, type=transaction}, to=4bFokH66xyYdFMI_AAAE, operator=Orange}
+
+
+Reception d'une commande  >> Sat Feb 13 11:01:26 WAT 2021 >>> {amount=11000.0, receiver=698788449, transaction=gateway.models.Transactions[ id=ref_00000000015 ]}
+
+Transaction ajouté dans le fil de traitement >> Sat Feb 13 11:01:26 WAT 2021 >>> Transaféré gateway.models.TransactionActivity[ id=28 ]
+
+Reception d'une commande  >> Sat Feb 13 11:02:49 WAT 2021 >>> {amount=11000.0, receiver=698788449, transaction=gateway.models.Transactions[ id=ref_00000000016 ]}
+
+Transaction ajouté dans le fil de traitement >> Sat Feb 13 11:02:49 WAT 2021 >>> Transaféré gateway.models.TransactionActivity[ id=29 ]
+
+Reponse Systeme >> Sat Feb 13 11:02:59 WAT 2021 >>> {collapse_key=type_a, workspace=5, data={data={transaction_id=ref_00000000015, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃ©ration, automate_agent_phone=698128155, created_at=2021-02-13 11:1, id=28, status=PENDING}, type=transaction}, to=19XUvauWi3h6-Wd9AAAE, operator=Orange}
+
+
+Reponse Systeme >> Sat Feb 13 11:03:09 WAT 2021 >>> {collapse_key=type_a, workspace=6, data={data={transaction_id=ref_00000000016, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃ©ration, automate_agent_phone=698128155, created_at=2021-02-13 11:2, id=29, status=PENDING}, type=transaction}, to=19XUvauWi3h6-Wd9AAAE, operator=Orange}
+
+
+Reponse Systeme >> Sat Feb 13 11:03:19 WAT 2021 >>> {collapse_key=type_a, workspace=5, data={data={transaction_id=ref_00000000015, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃ©ration, automate_agent_phone=698128155, created_at=2021-02-13 11:1, id=28, status=PENDING}, type=transaction}, to=19XUvauWi3h6-Wd9AAAE, operator=Orange}
+
+
+Reponse Systeme >> Sat Feb 13 11:03:29 WAT 2021 >>> {collapse_key=type_a, workspace=6, data={data={transaction_id=ref_00000000016, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃ©ration, automate_agent_phone=698128155, created_at=2021-02-13 11:2, id=29, status=PENDING}, type=transaction}, to=19XUvauWi3h6-Wd9AAAE, operator=Orange}
+
+
+Reponse Systeme >> Sat Feb 13 11:03:39 WAT 2021 >>> {collapse_key=type_a, workspace=5, data={data={transaction_id=ref_00000000015, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃ©ration, automate_agent_phone=698128155, created_at=2021-02-13 11:1, id=28, status=PENDING}, type=transaction}, to=19XUvauWi3h6-Wd9AAAE, operator=Orange}
+
+
+Reponse Systeme >> Sat Feb 13 11:03:49 WAT 2021 >>> {collapse_key=type_a, workspace=6, data={data={transaction_id=ref_00000000016, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃ©ration, automate_agent_phone=698128155, created_at=2021-02-13 11:2, id=29, status=PENDING}, type=transaction}, to=19XUvauWi3h6-Wd9AAAE, operator=Orange}
+
+
+Reception d'une commande  >> Sat Feb 13 11:06:04 WAT 2021 >>> {amount=11000.0, receiver=698788449, transaction=gateway.models.Transactions[ id=ref_00000000017 ]}
+
+Transaction ajouté dans le fil de traitement >> Sat Feb 13 11:06:04 WAT 2021 >>> Transaféré gateway.models.TransactionActivity[ id=30 ]
+
+Reception d'une commande  >> Sat Feb 13 11:07:01 WAT 2021 >>> {amount=11000.0, receiver=698788449, transaction=gateway.models.Transactions[ id=ref_00000000018 ]}
+
+Transaction ajouté dans le fil de traitement >> Sat Feb 13 11:07:01 WAT 2021 >>> Transaféré gateway.models.TransactionActivity[ id=31 ]
+
+Reponse Systeme >> Sat Feb 13 11:07:11 WAT 2021 >>> {collapse_key=type_a, workspace=8, data={data={transaction_id=ref_00000000018, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃ©ration, automate_agent_phone=698128155, created_at=2021-02-13 11:7, id=31, status=PENDING}, type=transaction}, to=Oxwh7qQQLtqYkU5TAAAH, operator=Orange}
+
+
+Reception d'une commande  >> Sat Feb 13 11:11:32 WAT 2021 >>> {amount=11000.0, receiver=698788449, transaction=gateway.models.Transactions[ id=ref_00000000019 ]}
+
+Transaction ajouté dans le fil de traitement >> Sat Feb 13 11:11:33 WAT 2021 >>> Transaféré gateway.models.TransactionActivity[ id=32 ]
+
+Reponse Systeme >> Sat Feb 13 11:11:43 WAT 2021 >>> {collapse_key=type_a, workspace=7, data={data={transaction_id=ref_00000000017, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃ©ration, automate_agent_phone=698128155, created_at=2021-02-13 11:6, id=30, status=PENDING}, type=transaction}, to=J2P8Dzn7lHEwRF-6AAAD, operator=Orange}
+
+
+Reception d'une commande  >> Sat Feb 13 11:48:48 WAT 2021 >>> {amount=11000.0, receiver=698788449, transaction=gateway.models.Transactions[ id=ref_00000000020 ]}
+
+Transaction ajouté dans le fil de traitement >> Sat Feb 13 11:48:48 WAT 2021 >>> Transaféré gateway.models.TransactionActivity[ id=33 ]
+
+Reponse Systeme >> Sat Feb 13 11:48:58 WAT 2021 >>> {collapse_key=type_a, workspace=9, data={data={transaction_id=ref_00000000019, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃ©ration, automate_agent_phone=698128155, created_at=2021-02-13 11:11, id=32, status=PENDING}, type=transaction}, to=j4CkUd5qpaSXdeHLAAAE, operator=Orange}
+
+
+Reponse Systeme >> Sat Feb 13 11:49:08 WAT 2021 >>> {collapse_key=type_a, workspace=10, data={data={transaction_id=ref_00000000020, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃ©ration, automate_agent_phone=698128155, created_at=2021-02-13 11:48, id=33, status=PENDING}, type=transaction}, to=j4CkUd5qpaSXdeHLAAAE, operator=Orange}
+
+
+Reponse Systeme >> Sat Feb 13 11:49:18 WAT 2021 >>> {collapse_key=type_a, workspace=7, data={data={transaction_id=ref_00000000017, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃ©ration, automate_agent_phone=698128155, created_at=2021-02-13 11:6, id=30, status=PENDING}, type=transaction}, to=j4CkUd5qpaSXdeHLAAAE, operator=Orange}
+
+
+Reponse Systeme >> Sat Feb 13 11:49:28 WAT 2021 >>> {collapse_key=type_a, workspace=8, data={data={transaction_id=ref_00000000018, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃ©ration, automate_agent_phone=698128155, created_at=2021-02-13 11:7, id=31, status=PENDING}, type=transaction}, to=j4CkUd5qpaSXdeHLAAAE, operator=Orange}
+
+
+Reponse Systeme >> Sat Feb 13 11:49:38 WAT 2021 >>> {collapse_key=type_a, workspace=9, data={data={transaction_id=ref_00000000019, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃƒÂ©ration, automate_agent_phone=698128155, created_at=2021-02-13 11:11, id=32, status=RUNNING}, type=transaction}, to=j4CkUd5qpaSXdeHLAAAE, operator=Orange}
+
+
+Reponse Systeme >> Sat Feb 13 11:49:48 WAT 2021 >>> {collapse_key=type_a, workspace=10, data={data={transaction_id=ref_00000000020, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃƒÂ©ration, automate_agent_phone=698128155, created_at=2021-02-13 11:48, id=33, status=RUNNING}, type=transaction}, to=j4CkUd5qpaSXdeHLAAAE, operator=Orange}
+
+
+Reponse Systeme >> Sat Feb 13 11:49:58 WAT 2021 >>> {collapse_key=type_a, workspace=7, data={data={transaction_id=ref_00000000017, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃƒÂ©ration, automate_agent_phone=698128155, created_at=2021-02-13 11:6, id=30, status=RUNNING}, type=transaction}, to=j4CkUd5qpaSXdeHLAAAE, operator=Orange}
+
+
+Reponse Systeme >> Sat Feb 13 11:50:08 WAT 2021 >>> {collapse_key=type_a, workspace=8, data={data={transaction_id=ref_00000000018, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃƒÂ©ration, automate_agent_phone=698128155, created_at=2021-02-13 11:7, id=31, status=RUNNING}, type=transaction}, to=j4CkUd5qpaSXdeHLAAAE, operator=Orange}
+
+
+Reponse Systeme >> Sat Feb 13 11:50:18 WAT 2021 >>> {collapse_key=type_a, workspace=9, data={data={transaction_id=ref_00000000019, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃƒÂ©ration, automate_agent_phone=698128155, created_at=2021-02-13 11:11, id=32, status=RUNNING}, type=transaction}, to=j4CkUd5qpaSXdeHLAAAE, operator=Orange}
+
+
+Reponse Systeme >> Sat Feb 13 11:50:28 WAT 2021 >>> {collapse_key=type_a, workspace=10, data={data={transaction_id=ref_00000000020, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃƒÂ©ration, automate_agent_phone=698128155, created_at=2021-02-13 11:48, id=33, status=RUNNING}, type=transaction}, to=j4CkUd5qpaSXdeHLAAAE, operator=Orange}
+
+
+Reponse Systeme >> Sat Feb 13 11:50:38 WAT 2021 >>> {collapse_key=type_a, workspace=3, data={data={transaction_id=ref_00000000013, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃ©ration, automate_agent_phone=698128155, created_at=2021-02-13 10:51, id=26, status=PENDING}, type=transaction}, to=j4CkUd5qpaSXdeHLAAAE, operator=Orange}
+
+
+Reception d'une commande  >> Sat Feb 13 12:28:58 WAT 2021 >>> {amount=11000.0, receiver=698788449, transaction=gateway.models.Transactions[ id=ref_00000000021 ]}
+
+Transaction ajouté dans le fil de traitement >> Sat Feb 13 12:28:58 WAT 2021 >>> Transaféré gateway.models.TransactionActivity[ id=34 ]
+
+Reponse Systeme >> Sat Feb 13 12:29:28 WAT 2021 >>> {collapse_key=type_a, workspace=11, data={data={transaction_id=ref_00000000021, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃ©ration, automate_agent_phone=698128155, created_at=2021-02-13 0:28, id=34, status=PENDING}, type=transaction}, to=sY68eEBbY1JInlSQAAAE, operator=Orange}
+
+
+Reponse Systeme >> Sat Feb 13 12:29:58 WAT 2021 >>> {collapse_key=type_a, workspace=11, data={data={transaction_id=ref_00000000021, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃƒÂ©ration$<<<>>>$Transaction reÃ§ue par le mobile, automate_agent_phone=698128155, created_at=2021-02-13 0:28, id=34, status=RUNNING}, type=transaction}, to=sY68eEBbY1JInlSQAAAE, operator=Orange}
+
+
+Reponse Systeme >> Sat Feb 13 12:30:28 WAT 2021 >>> {collapse_key=type_a, workspace=11, data={data={transaction_id=ref_00000000021, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃƒÆ’Ã‚Â©ration$<<<>>>$Transaction reÃƒÂ§ue par le mobile$<<<>>>$Transaction reÃ§ue par le mobile, automate_agent_phone=698128155, created_at=2021-02-13 0:28, id=34, status=RUNNING}, type=transaction}, to=sY68eEBbY1JInlSQAAAE, operator=Orange}
+
+
+Reception d'une commande  >> Sat Feb 13 12:45:44 WAT 2021 >>> {amount=11000.0, receiver=698788449, transaction=gateway.models.Transactions[ id=ref_00000000022 ]}
+
+Transaction ajouté dans le fil de traitement >> Sat Feb 13 12:45:44 WAT 2021 >>> Transaféré gateway.models.TransactionActivity[ id=35 ]
+
+Reponse Systeme >> Sat Feb 13 12:46:14 WAT 2021 >>> {collapse_key=type_a, workspace=12, data={data={transaction_id=ref_00000000022, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃ©ration, automate_agent_phone=698128155, created_at=2021-02-13 0:45, id=35, status=PENDING}, type=transaction}, to=W99NJrr9JEK8fK83AAAE, operator=Orange}
+
+
+Reception d'une commande  >> Sat Feb 13 13:11:02 WAT 2021 >>> {amount=11000.0, receiver=698788449, transaction=gateway.models.Transactions[ id=ref_00000000023 ]}
+
+Transaction ajouté dans le fil de traitement >> Sat Feb 13 13:11:02 WAT 2021 >>> Transaféré gateway.models.TransactionActivity[ id=36 ]
+
+Reponse Systeme >> Sat Feb 13 13:11:32 WAT 2021 >>> {collapse_key=type_a, workspace=13, data={data={transaction_id=ref_00000000023, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃ©ration, automate_agent_phone=698128155, created_at=2021-02-13 1:11, id=36, status=PENDING}, type=transaction}, to=_gAoRe_IuQUuuCPkAAAL, operator=Orange}
+
+
+Reception d'une commande  >> Sat Feb 13 13:12:37 WAT 2021 >>> {amount=11000.0, receiver=698788449, transaction=gateway.models.Transactions[ id=ref_00000000024 ]}
+
+Reception d'une commande  >> Sat Feb 13 13:12:59 WAT 2021 >>> {amount=11000.0, receiver=698788449, transaction=gateway.models.Transactions[ id=ref_00000000025 ]}
+
+Transaction ajouté dans le fil de traitement >> Sat Feb 13 13:12:59 WAT 2021 >>> Transaféré gateway.models.TransactionActivity[ id=37 ]
+
+Reponse Systeme >> Sat Feb 13 13:13:29 WAT 2021 >>> {collapse_key=type_a, workspace=14, data={data={transaction_id=ref_00000000025, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃ©ration, automate_agent_phone=698128155, created_at=2021-02-13 1:12, id=37, status=PENDING}, type=transaction}, to=hLiaAP7efsTJCmHlAAAE, operator=Orange}
+
+
+Reponse Systeme >> Sat Feb 13 13:13:59 WAT 2021 >>> {collapse_key=type_a, workspace=12, data={data={transaction_id=ref_00000000022, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃƒÂ©ration$<<<>>>$Transaction reÃ§ue par le mobile, automate_agent_phone=698128155, created_at=2021-02-13 0:45, id=35, status=RUNNING}, type=transaction}, to=hLiaAP7efsTJCmHlAAAE, operator=Orange}
+
+
+Reponse Systeme >> Sat Feb 13 13:14:29 WAT 2021 >>> {collapse_key=type_a, workspace=13, data={data={transaction_id=ref_00000000023, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃ©ration, automate_agent_phone=698128155, created_at=2021-02-13 1:11, id=36, status=PENDING}, type=transaction}, to=hLiaAP7efsTJCmHlAAAE, operator=Orange}
+
+
+Reponse Systeme >> Sat Feb 13 13:14:59 WAT 2021 >>> {collapse_key=type_a, workspace=4, data={data={transaction_id=ref_00000000014, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃ©ration, automate_agent_phone=698128155, created_at=2021-02-13 10:59, id=27, status=PENDING}, type=transaction}, to=hLiaAP7efsTJCmHlAAAE, operator=Orange}
+
+
+Reception d'une commande  >> Sat Feb 13 13:15:02 WAT 2021 >>> {amount=910000.0, receiver=698788449, transaction=gateway.models.Transactions[ id=ref_00000000026 ]}
+
+Reception d'une commande  >> Sat Feb 13 13:15:11 WAT 2021 >>> {amount=91000.0, receiver=698788449, transaction=gateway.models.Transactions[ id=ref_00000000027 ]}
+
+Transaction ajouté dans le fil de traitement >> Sat Feb 13 13:15:11 WAT 2021 >>> Transaféré gateway.models.TransactionActivity[ id=38 ]
+
+Reponse Systeme >> Sat Feb 13 13:15:29 WAT 2021 >>> {collapse_key=type_a, workspace=15, data={data={transaction_id=ref_00000000027, amount=91000.0, client_phone=698788449, log=Initiation de l'opÃ©ration, automate_agent_phone=698128155, created_at=2021-02-13 1:15, id=38, status=PENDING}, type=transaction}, to=hLiaAP7efsTJCmHlAAAE, operator=Orange}
+
+
+Reponse Systeme >> Sat Feb 13 13:15:59 WAT 2021 >>> {collapse_key=type_a, workspace=6, data={data={transaction_id=ref_00000000016, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃ©ration, automate_agent_phone=698128155, created_at=2021-02-13 11:2, id=29, status=PENDING}, type=transaction}, to=hLiaAP7efsTJCmHlAAAE, operator=Orange}
+
+
+Reception d'une commande  >> Sat Feb 13 13:16:07 WAT 2021 >>> {amount=750000.0, receiver=698788449, transaction=gateway.models.Transactions[ id=ref_00000000028 ]}
+
+Transaction ajouté dans le fil de traitement >> Sat Feb 13 13:16:07 WAT 2021 >>> Transaféré gateway.models.TransactionActivity[ id=39 ]
+
+Reponse Systeme >> Sat Feb 13 13:16:29 WAT 2021 >>> {collapse_key=type_a, workspace=16, data={data={transaction_id=ref_00000000028, amount=750000.0, client_phone=698788449, log=Initiation de l'opÃ©ration, automate_agent_phone=698128155, created_at=2021-02-13 1:16, id=39, status=PENDING}, type=transaction}, to=hLiaAP7efsTJCmHlAAAE, operator=Orange}
+
+
+Reponse Systeme >> Sat Feb 13 13:16:59 WAT 2021 >>> {collapse_key=type_a, workspace=7, data={data={transaction_id=ref_00000000017, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃƒÂ©ration, automate_agent_phone=698128155, created_at=2021-02-13 11:6, id=30, status=RUNNING}, type=transaction}, to=hLiaAP7efsTJCmHlAAAE, operator=Orange}
+
+
+Reponse Systeme >> Sat Feb 13 13:17:29 WAT 2021 >>> {collapse_key=type_a, workspace=8, data={data={transaction_id=ref_00000000018, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃƒÂ©ration, automate_agent_phone=698128155, created_at=2021-02-13 11:7, id=31, status=RUNNING}, type=transaction}, to=hLiaAP7efsTJCmHlAAAE, operator=Orange}
+
+
+Reponse Systeme >> Sat Feb 13 13:17:59 WAT 2021 >>> {collapse_key=type_a, workspace=9, data={data={transaction_id=ref_00000000019, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃƒÂ©ration, automate_agent_phone=698128155, created_at=2021-02-13 11:11, id=32, status=RUNNING}, type=transaction}, to=hLiaAP7efsTJCmHlAAAE, operator=Orange}
+
+
+Reponse Systeme >> Sat Feb 13 13:18:29 WAT 2021 >>> {collapse_key=type_a, workspace=10, data={data={transaction_id=ref_00000000020, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃƒÂ©ration, automate_agent_phone=698128155, created_at=2021-02-13 11:48, id=33, status=RUNNING}, type=transaction}, to=hLiaAP7efsTJCmHlAAAE, operator=Orange}
+
+
+Reponse Systeme >> Sat Feb 13 13:18:59 WAT 2021 >>> {collapse_key=type_a, workspace=11, data={data={transaction_id=ref_00000000021, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©ration$<<<>>>$Transaction reÃƒÆ’Ã‚Â§ue par le mobile$<<<>>>$Transaction reÃƒÂ§ue par le mobile$<<<>>>$Transaction reÃ§ue par le mobile, automate_agent_phone=698128155, created_at=2021-02-13 0:28, id=34, status=RUNNING}, type=transaction}, to=hLiaAP7efsTJCmHlAAAE, operator=Orange}
+
+
+Reponse Systeme >> Sat Feb 13 13:19:29 WAT 2021 >>> {collapse_key=type_a, workspace=1, data={data={transaction_id=ref_00000000010, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃ©ration, automate_agent_phone=698128155, created_at=2021-02-13 10:48, id=24, status=PENDING}, type=transaction}, to=hLiaAP7efsTJCmHlAAAE, operator=Orange}
+
+
+Reponse Systeme >> Sat Feb 13 13:19:59 WAT 2021 >>> {collapse_key=type_a, workspace=2, data={data={transaction_id=ref_00000000011, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃ©ration, automate_agent_phone=698128155, created_at=2021-02-13 10:49, id=25, status=PENDING}, type=transaction}, to=hLiaAP7efsTJCmHlAAAE, operator=Orange}
+
+
+Reception d'une commande  >> Sat Feb 13 13:20:16 WAT 2021 >>> {amount=750000.0, receiver=698788449, transaction=gateway.models.Transactions[ id=ref_00000000029 ]}
+
+Transaction ajouté dans le fil de traitement >> Sat Feb 13 13:20:16 WAT 2021 >>> Transaféré gateway.models.TransactionActivity[ id=40 ]
+
+Reponse Systeme >> Sat Feb 13 13:20:29 WAT 2021 >>> {collapse_key=type_a, workspace=17, data={data={transaction_id=ref_00000000029, amount=750000.0, client_phone=698788449, log=Initiation de l'opÃ©ration, automate_agent_phone=698128155, created_at=2021-02-13 1:20, id=40, status=PENDING}, type=transaction}, to=hLiaAP7efsTJCmHlAAAE, operator=Orange}
+
+
+Reponse Systeme >> Sat Feb 13 13:20:59 WAT 2021 >>> {collapse_key=type_a, workspace=3, data={data={transaction_id=ref_00000000013, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃƒÂ©ration, automate_agent_phone=698128155, created_at=2021-02-13 10:51, id=26, status=RUNNING}, type=transaction}, to=hLiaAP7efsTJCmHlAAAE, operator=Orange}
+
+
+Reponse Systeme >> Sat Feb 13 13:21:29 WAT 2021 >>> {collapse_key=type_a, workspace=5, data={data={transaction_id=ref_00000000015, amount=11000.0, client_phone=698788449, log=Initiation de l'opÃ©ration, automate_agent_phone=698128155, created_at=2021-02-13 11:1, id=28, status=PENDING}, type=transaction}, to=hLiaAP7efsTJCmHlAAAE, operator=Orange}

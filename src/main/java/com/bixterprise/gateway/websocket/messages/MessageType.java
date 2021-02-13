@@ -1,11 +1,9 @@
 package com.bixterprise.gateway.websocket.messages;
 
 public enum MessageType {
-	
+	SERVER_DISCONNECTED("disconnect"),
 	LOGIN("login"), 
         LOGOUT("logout"), 
-        NOTIFY("notify"), 
-        UPDATE("update"), 
         PING("ping"), PONG("pong"), 
         NEXT("next"), NEXT_RECEIVED("next_received"),
 	ORANGE_THREAD_STARTED("start/process/orange/started"),
@@ -16,7 +14,9 @@ public enum MessageType {
         MTN_THREAD_STOP("stop/process/mtn"),
         ASK_COMMAND_FOR_ORANGE("command/for/orange"),
         ASK_COMMAND_FOR_MTN("command/for/mtn"),
-        COMMAND_FOR_RECEIVED("command/received");
+        COMMAND_FOR_RECEIVED("command/received"),
+        NOTIFY("command/notify"), 
+        UPDATE("command/update");
         
 	public final String value;
 	
