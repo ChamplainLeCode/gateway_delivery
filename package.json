@@ -1,0 +1,21 @@
+{
+  "name": "gateway_deliverer",
+  "version": "1.0.0",
+  "description": "This service is a part of Gateway Microservice, it's used to deliver payment command to mobile.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "gateway",
+    "mobile",
+    "payment",
+    "Bixterprise"
+  ],
+  "author": "Champlain N. Bakop",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^3.1.1"
+  }
+}
