@@ -227,7 +227,7 @@ public class WebSocketService  {
     public void onAgentLogout(Object...args) {
         LogFactory
             .getLog(WebSocketService.class)
-            .debug("\n\n###################################################\n#### Disconnect from "+Collections.asSet(args).stream().collect(LinkedList::new , LinkedList::add, LinkedList::addAll)+"\n###################################################");
+            .debug("\n\n###################################################\n#### Disconnect from \n###################################################");
 
         if(args != null && args.length > 0){
             /**
@@ -280,7 +280,7 @@ public class WebSocketService  {
                 try {
                     TransactionActivity ta = new TransactionActivity();
                     JSONObject m = JSONObject.class.cast(entry);
-                    ta.setId(m.getLong("transaction"));
+                    ta.setId(m.getLong("id"));
                     ta.setLog(m.getString("log"));
                     ta.setStatus(m.getString("status"));
                     transactionRestController.CommandComplete(ta);
@@ -302,6 +302,7 @@ public class WebSocketService  {
             for(Object id : receptionDeliveries){
                 TransactionActivity ta = new TransactionActivity(Long.parseLong(id+""));
                     HashMap rest = transactionRestController.CommandReceptionReport(ta);
+                gatewayDeliverer.emit("commande/notify", rest);
 //                    rest.put("type", "notify");
 //                    session.sendMessage(new TextMessage(rest.toString().getBytes()));
             }

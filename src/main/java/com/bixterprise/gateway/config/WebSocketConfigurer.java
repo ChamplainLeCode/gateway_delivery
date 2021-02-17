@@ -85,7 +85,12 @@ public class WebSocketConfigurer {
     public Lock orangeWorkSpaceThreadLock(){
         Lock queueLock = new ReentrantLock(true);
         return queueLock;
-        
+    }
+    
+    @Bean(name="gatewayOnlineAgentLock")
+    public Lock gatewayOnlineAgentLock(){
+        Lock queueLock = new ReentrantLock(true);
+        return queueLock;   
     }
     
     

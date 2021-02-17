@@ -28,5 +28,7 @@ public interface WorkSpaceRepository extends JpaRepository<WorkSpace, Long> {
 
     public WorkSpace findByActivity(TransactionActivity ta);
 
+    public WorkSpace findByActivity(Long ta);
+
     
 }

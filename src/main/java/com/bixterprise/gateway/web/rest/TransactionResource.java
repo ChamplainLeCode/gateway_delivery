@@ -37,7 +37,6 @@ import com.bixterprise.gateway.utils.TransactionStatus;
 import com.bixterprise.gateway.utils.http;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.locks.Lock;
 import org.slf4j.Logger;
@@ -572,7 +571,7 @@ public class TransactionResource {
 			HashMap res = new HashMap();
 			res.put("status", true);
 			res.put("message", "1000");
-			res.put("data", ta.toHashMap());
+			res.put("data", tb.toHashMap());
                         FutureTask<Integer> future = new FutureTask<Integer>(() -> {
                             
                                 try{

@@ -35,9 +35,6 @@ import java.util.HashMap;
  */
 @Entity
 @Table(name = "transaction_activity")
-@XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "TransactionActivity.findAll", query = "SELECT t FROM TransactionActivity t")})
 public class TransactionActivity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -165,10 +162,7 @@ public class TransactionActivity implements Serializable {
             return false;
         }
         TransactionActivity other = (TransactionActivity) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override
