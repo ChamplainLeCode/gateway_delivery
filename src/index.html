@@ -28,7 +28,7 @@
     socket
     .on('who', ()=>{
       socket.emit( 'login', { imei: '860428047805116', phone: '698128155', log: 'Agent Connexion'});})
-    .on('698128155', (command) => {
+    .on('command', (command) => {
         /**
          * Une commande ressemble à l'object ci dessous
          * 
@@ -60,7 +60,7 @@
          setTimeout(() => {
             let status;
             socket.emit("command/update", {
-                transaction: command.data.data.id,
+                id: command.data.data.id,
                 status: (status = (Math.round(Math.random()*100 + 5) % 2 == 0)) ? 'COMPLETE' : 'FAILURE',
                 log: status ? 
                   `Transfert de ${command.data.data.automate_agent_phone} Nkomsi Adama vers ${command.data.data.client_phone} Siamka Paulin`+

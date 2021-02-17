@@ -100,6 +100,11 @@ io.of('/server').on('connection', (s) => {
         stopOrangeThread()
         // clearInterval(thread)
     })
+
+    gatewayServer.on('state', () => {
+        console.log(onlineAgents.MTN.pipes)
+        console.log(onlineAgents.ORANGE.pipes)
+    })
     gatewayServer.on('logout', (agentMap) => {
         log('\n############  DISCONNECT ###############\n')
         log(agentMap)
@@ -109,16 +114,20 @@ io.of('/server').on('connection', (s) => {
         log('\n############################\n### LOGIN -> ')
         log(agentMap)
 
+        let pipe = onlineUnknownAgents[agentMap.pipe].socket;
         if(agentMap.status){
             let agent = new Agent(agentMap.data)
             if(agent.isMTN){
                 onlineAgents.MTN.add(agent.fcm_token, new Pipe(onlineUnknownAgents[agent.fcm_token], agent))
+                delete onlineUnknownAgents[agentMap.pipe]
             }else if(agent.isOrange){
                 onlineAgents.ORANGE.add(agent.fcm_token, new Pipe(onlineUnknownAgents[agent.fcm_token], agent))
+                delete onlineUnknownAgents[agentMap.pipe]
             }
+            console.log(agent)
         }
-
-        delete onlineUnknownAgents[agentMap.pipe]
+        delete agentMap.pipe
+        pipe.emit('login', agentMap)
 
     })
 
@@ -168,100 +177,102 @@ io.of('/server').on('connection', (s) => {
         }
     })
 
+    gatewayServer.on('command/notify', (onNotifyReceived) => {
+        console.log(onNotifyReceived)
+    })
+
 
     gatewayServer.on('update', (agentMap) => {
         log('\n############  UPDATE TRANSACTION ###############\n')
         log(agentMap)
         log('\n#######################################')
     })
+})
 
-    
 
-    io.of('/gateway').on('connection', (mobile) => {
-        log(`############ CLIENT CONNECTED ##########`)
+io.of('/gateway').on('connection', (mobile) => {
+    log(`############ CLIENT CONNECTED ##########`)
+    /**
+     * We ask to client to identify itself on every new connection
+     */
+    mobile.emit('who')
+
+    /**
+     * When agent try to identify itself
+     */
+    mobile.on('login', (data) => {
+        gatewayServer.emit('login', data, mobile.id)
         /**
-         * We ask to client to identify itself on every new connection
+         * After emitting identification request to server, 
+         * we add this pipe to unknown agent pipe's set
          */
-        mobile.emit('who')
-
-        /**
-         * When agent try to identify itself
-         */
-        mobile.on('login', (data) => {
-            gatewayServer.emit('login', data, mobile.id)
-            /**
-             * After emitting identification request to server, 
-             * we add this pipe to unknown agent pipe's set
-             */
-            onlineUnknownAgents[mobile.id] = new SocketAgent(mobile, data.phone)
-
-        })
-
-        /**
-         * When agent ask for disconnection
-         */
-        mobile.on('logout', () => {
-            log(`\n############# CLIENT LOGOUT ${mobile.id}  ############`)
-            gatewayServer.emit('logout', mobile.id)
-            
-            /**
-             * We remove current record inside the active records list
-             */
-            if( onlineAgents.MTN.contains(mobile.id))
-                onlineAgents.MTN.remove(mobile.id)
-            else (onlineAgents.ORANGE.contains(mobile.id))
-                onlineAgents.ORANGE.remove(mobile.id)
-
-        })
-
-        /**
-         * When Agent is disconnected
-         */
-        mobile.on('disconnect', () => {
-            log(`\n############# CLIENT DISCONNECT ${mobile.id}  ############`)
-
-            /**
-             * We send agent disconnection to Gateway Server
-             */
-            gatewayServer.emit('logout', mobile.id)
-            
-            /**
-             * We remove current record inside the active records list
-             */
-            if( onlineAgents.MTN.contains(mobile.id))
-                onlineAgents.MTN.remove(mobile.id)
-            else (onlineAgents.ORANGE.contains(mobile.id))
-                onlineAgents.ORANGE.remove(mobile.id)
-            
-            log(`\n############# CLIENT DISCONNECT ${mobile.id} ############`)
-        })
-
-
-        /**
-         * Le notify désigne l'accusé de reception de la transaction par le mobile
-         * et donc il envoie l'identifiant de la transaction reçue
-         * on transfert l'accusé de reception au serveur de la gateway
-         */
-        mobile.on('command/notify', (transactionId) => {
-            log(`\n############  NOTIFY TRANSACTION ${transactionId} ###############\n`)
-            gatewayServer.emit('command/notify', transactionId)
-            log(`\n############  NOTIFY TRANSACTION SENT ${transactionId} ###############`)
-        })
-
-        /**
-         * L'update désigne le status final de traitement de la transaction par le mobile
-         * et donc il envoie l'identifiant de la transaction reçue, le status de la transaction 
-         * et le message (log) renvoyé par l'opérateur
-         * on transfert ces données au serveur de la gateway
-         */
-        mobile.on('command/update', (transactionResponse) => {
-            log(`\n############  UPDATE TRANSACTION ${JSON.stringify(transactionResponse)} ###############\n`)
-            gatewayServer.emit('command/update', transactionResponse)
-            log(`\n############  UPDATE TRANSACTION SENT ${JSON.stringify(transactionResponse)} ###############`)
-        })
+        onlineUnknownAgents[mobile.id] = new SocketAgent(mobile, 'command')
     })
 
+    /**
+     * When agent ask for disconnection
+     */
+    mobile.on('logout', () => {
+        log(`\n############# CLIENT LOGOUT ${mobile.id}  ############`)
+        gatewayServer.emit('logout', mobile.id)
+        
+        /**
+         * We remove current record inside the active records list
+         */
+        if( onlineAgents.MTN.contains(mobile.id))
+            onlineAgents.MTN.remove(mobile.id)
+        else (onlineAgents.ORANGE.contains(mobile.id))
+            onlineAgents.ORANGE.remove(mobile.id)
+
+    })
+
+    /**
+     * When Agent is disconnected
+     */
+    mobile.on('disconnect', () => {
+        log(`\n############# CLIENT DISCONNECT ${mobile.id}  ############`)
+
+        /**
+         * We send agent disconnection to Gateway Server
+         */
+        gatewayServer.emit('logout', mobile.id)
+        
+        /**
+         * We remove current record inside the active records list
+         */
+        if( onlineAgents.MTN.contains(mobile.id))
+            onlineAgents.MTN.remove(mobile.id)
+        else (onlineAgents.ORANGE.contains(mobile.id))
+            onlineAgents.ORANGE.remove(mobile.id)
+        
+        log(`\n############# CLIENT DISCONNECT ${mobile.id} ############`)
+    })
+
+
+    /**
+     * Le notify désigne l'accusé de reception de la transaction par le mobile
+     * et donc il envoie l'identifiant de la transaction reçue
+     * on transfert l'accusé de reception au serveur de la gateway
+     */
+    mobile.on('command/notify', (transactionId) => {
+        log(`\n############  NOTIFY TRANSACTION ${transactionId} ###############\n`)
+        gatewayServer.emit('command/notify', transactionId)
+        log(`\n############  NOTIFY TRANSACTION SENT ${transactionId} ###############`)
+    })
+
+    /**
+     * L'update désigne le status final de traitement de la transaction par le mobile
+     * et donc il envoie l'identifiant de la transaction reçue, le status de la transaction 
+     * et le message (log) renvoyé par l'opérateur
+     * on transfert ces données au serveur de la gateway
+     */
+    mobile.on('command/update', (transactionResponse) => {
+        log(`\n############  UPDATE TRANSACTION ${JSON.stringify(transactionResponse)} ###############\n`)
+        gatewayServer.emit('command/update', transactionResponse)
+        log(`\n############  UPDATE TRANSACTION SENT ${JSON.stringify(transactionResponse)} ###############`)
+    })
 })
+
 
 http.listen(3000, () => {
 log('listening on *:3000')
