@@ -187,9 +187,6 @@ public class WebSocketService  {
 	}
 
     public void onAgentLogin(Object...args) {
-        LogFactory
-            .getLog(WebSocketService.class)
-            .debug("\n\n###################################################\n#### Login from "+Collections.asSet(args).stream().collect(LinkedList::new , LinkedList::add, LinkedList::addAll)+"\n###################################################");
         	if(args != null && args.length > 1){
                     AutomateAgents agent = ObjectParser.parse(JSONObject.class.cast(args[0]).toString(), AutomateAgents.class);
             LogFactory
