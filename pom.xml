@@ -6,7 +6,7 @@
     <groupId>com.bixterprise.gateway</groupId>
     <artifactId>gateway</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
     <name>Gateway</name>
 
     <repositories>
