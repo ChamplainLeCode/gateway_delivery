@@ -123,3 +123,17 @@ jhipster:
 # ===================================================================
 
 # application:
+entity:
+  page:
+    max: 1000
+
+sp:
+  gateway:
+    user:
+      username: $2y$12$NaoI.dnnFRYdSFu/WYYB1e5unpGz1ApjmnnNEmTmRZNHSkQ5Y3.uK
+      password: $2y$12$l/AI5nVa38TMJJvRmHH8F.VPe8zPsTSgiR/NQwymlg4mCRK9TyN4S
+
+microservice:
+  deliverer:
+    url: http://74.208.183.205:8087/server
+    login:

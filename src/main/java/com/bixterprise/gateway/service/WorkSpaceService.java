@@ -12,9 +12,9 @@ import com.bixterprise.gateway.repository.TransactionActivityRepository;
 
 import com.bixterprise.gateway.utils.PhoneOperator;
 import com.bixterprise.gateway.utils.TransactionStatus;
-import com.bixterprise.gateway.web.rest.TransactionResource;
 import com.bixterprise.gateway.websocket.messages.MessageType;
 import io.socket.client.Socket;
+import java.util.HashMap;
 import java.util.concurrent.locks.Lock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -31,7 +31,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class WorkSpaceService {
     
-    
+    public static String LOG_SEPARATOR = "$<<<>>>$";
+
     /**
      * Repository for workSpace db
      */
@@ -54,7 +55,8 @@ public class WorkSpaceService {
     @Autowired @Qualifier("gatewayOrangeWorkSpaceThreadLock") Lock orangeThreadLock;
     @Autowired @Qualifier("gatewayDeliverer") Socket gatewayDeliverer;
     
-    
+    public static HashMap<String, Object> map = new HashMap<>();
+
     public WorkSpace save(TransactionActivity transac){
         
         WorkSpace workSpace = new WorkSpace();
@@ -148,18 +150,18 @@ public class WorkSpaceService {
     }
 
     public void updateWorkSpaceReceived(Long id) {
-        db  .findById(id)
-            .ifPresent((WorkSpace workSpace) -> {
+        WorkSpace workSpace = db  .findById(id).orElse(null);
+            if(workSpace != null){
                 workSpace.setHop(workSpace.getHop()+1);
                 if(workSpace.getHop() == 4){
                     TransactionActivity ta = workSpace.getActivity();
                     ta.setStatus(TransactionStatus.FAILURE.toString());
-                    ta.setLog(ta.getLog()+TransactionResource.LOG_SEPARATOR+"Multiple Tentatives");
+                    ta.setLog(ta.getLog()+LOG_SEPARATOR+"Multiple Tentatives");
                     transactionActivityRepository.save(ta);
                     db.delete(workSpace);
                     return;
                 }
                 db.save(workSpace);
-          });
+          }
     }
 }

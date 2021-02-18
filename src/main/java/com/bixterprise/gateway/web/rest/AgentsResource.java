@@ -19,10 +19,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bixterprise.gateway.repository.AgentActivityRepository;
-import com.bixterprise.gateway.repository.AgentRepository;
+import com.bixterprise.gateway.service.AgentService;
 import com.bixterprise.gateway.domain.AgentActivity;
 import com.bixterprise.gateway.domain.AutomateAgents;
 import com.bixterprise.gateway.domain.enums.AgentStatus;
+import com.bixterprise.gateway.service.AgentActivityService;
 import com.bixterprise.gateway.utils.http;
 
 import java.util.HashMap;
@@ -36,11 +37,11 @@ public class AgentsResource {
 	@Value("${entity.page.max}")
 	Integer maxByPage;
 	
-	@Autowired
-	AgentRepository agentRepository;
 	
+	@Autowired AgentService agentService;
+        
 	@Autowired
-	AgentActivityRepository agentActivityRepository;
+	AgentActivityService agentActivityService;
 	
 	@GetMapping("/detail/{phone}")
 	public Object getUnique(@PathVariable(required = true, name = "phone") String phone)  {
@@ -50,24 +51,24 @@ public class AgentsResource {
 			obj.put("label", "Phone number error");
 			return obj;
 		}
-		Optional<AutomateAgents> o = agentRepository.findById(phone);
-		if(!o.isPresent()) {
+		AutomateAgents o = agentService.findById(phone);
+		if(o == null) {
 			HashMap obj = new HashMap();
 			obj.put("code", 102);
 			obj.put("label", "Agent not found");
 			return obj;
 		}
-		return o.get();
+		return o;
 	}
 	
 	@GetMapping("/all")
 	public List<AutomateAgents> getAll(){
-		return agentRepository.findAll();
+		return agentService.findAll();
 	}
 
 	@GetMapping("/all/page/{page}")
 	public List<AutomateAgents> getAllByPage(@PathVariable int page){
-		return agentRepository.findAll(PageRequest.of(page, maxByPage)).toList();
+		return agentService.findAll(PageRequest.of(page, maxByPage)).toList();
 	}
 
 	@PostMapping("/add")
@@ -93,14 +94,14 @@ public class AgentsResource {
 			return obj;
 		}
 		
-		if(agentRepository.findById(a.getPhone()).isPresent()) {
+		if(agentService.findById(a.getPhone()) != null) {
 			HashMap obj = new HashMap();
 			obj.put("code", "103");
 			obj.put("label", "User already exists error");
 			return obj;
 		}
 		
-		if(agentRepository.findByImei(a.getImei()).isPresent()) {
+		if(agentService.findByImei(a.getImei()) != null) {
 			HashMap obj = new HashMap();
 			obj.put("code", "103");
 			obj.put("label", "Imei already exists error");
@@ -114,7 +115,7 @@ public class AgentsResource {
 		a.setCreatedAt(Calendar.getInstance().getTime());
 		a.setUpdatedAt(a.getCreatedAt());
 		try {
-			agentRepository.save(a);
+			agentService.save(a);
 			HashMap obj = new HashMap();
 			obj.put("code", 100);
 			obj.put("label", "success");
@@ -124,7 +125,7 @@ public class AgentsResource {
                         new Thread(){
                             public void run(){
                                 http.updateOperator(a);
-                                agentRepository.save(a);
+                                agentService.save(a);
                             } 
                         }.start();
 			return obj;
@@ -165,16 +166,16 @@ public class AgentsResource {
 				obj.put("label", "Imei malformed error");
 				return obj;
 			}
-			Optional<AutomateAgents> age;
-			if((age = agentRepository.findById(a.getPhone())).isPresent()) {
-				AutomateAgents agent = age.get();
+			AutomateAgents age;
+			if((age = agentService.findById(a.getPhone())) != null) {
+				AutomateAgents agent = age;
 				if(agent.getIs_online()) {
 					HashMap obj = new HashMap();
 					obj.put("code", "103");
 					obj.put("label", "Agent is online, disconnect device first");
 					return obj;
 				}
-				if(agentRepository.findByImei(a.getImei()).isPresent()) {
+				if(agentService.findByImei(a.getImei()) != null) {
 					HashMap obj = new HashMap();
 					obj.put("code", "103");
 					obj.put("label", "Imei already used by another");
@@ -185,7 +186,7 @@ public class AgentsResource {
 					agent.setSolde(a.getBalance());
 				}
 				agent.setUpdatedAt(Calendar.getInstance().getTime());
-				agentRepository.save(agent);
+				agentService.save(agent);
 				HashMap obj = new HashMap();
 				obj.put("code", 100);
 				obj.put("label", "success");
@@ -206,88 +207,14 @@ public class AgentsResource {
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json")
 	public HashMap login(@RequestBody AutomateAgents a) {
-		AutomateAgents loggedUser = agentRepository.doLogin(a.getPhone(), a.getImei());
-		//System.out.println("Login de "+a.toJSONString()+"\nIsONline = "+loggedUser.getIs_online());
-		
-		
-		if(loggedUser != null) {
-			if(a.getFcm_token() == null) {
-				HashMap obj = new HashMap();
-				obj.put("code", "100");
-				obj.put("label", "FCM_Token is missing");
-				HashMap res = new HashMap();
-				res.put("status", false);
-				res.put("message", 1001);
-				res.put("errors", obj);
-				return res;
-			}
-			loggedUser.setFcm_token(a.getFcm_token());
-			loggedUser.setIsOnline(true);
-			loggedUser.setUpdatedAt(Calendar.getInstance().getTime());
-			agentRepository.save(loggedUser);
-			
-			/**
-			 * On enregistre son activité
-			 */
-			AgentActivity activ = new AgentActivity();
-			activ.setAgent(loggedUser);
-			activ.setLog(a.getLog());
-			activ.setContext("LOGIN");
-			activ.setCreatedAt(Calendar.getInstance().getTime());
-			agentActivityRepository.save(activ);
-			
-			HashMap map = new HashMap();
-			
-			map.put("status", true);
-			map.put("message", 1000);
-			map.put("data", loggedUser.toJSONString());
-			return map;
-		}
-		HashMap obj = new HashMap(); 
-		obj.put("code", "101");
-		obj.put("label", "INVALID_CREDENTIAL");
-		HashMap res = new HashMap();
-		res.put("status", false);
-		res.put("message", 1001);
-		res.put("errors", obj);
-		
-		return res;
+		HashMap loggedUser = agentService.login(a);
+                return loggedUser;
 	}
 	
 
 	@RequestMapping(value = "/logout", method = RequestMethod.POST, produces = "application/json")
 	public HashMap logout(@RequestBody AutomateAgents a) {
-		AutomateAgents loggedUser = agentRepository.doLogin(a.getPhone(), a.getImei());
 		
-		if(loggedUser != null) {
-			loggedUser.setFcm_token("");
-			loggedUser.setIsOnline(false);
-			loggedUser.setUpdatedAt(Calendar.getInstance().getTime());
-			agentRepository.save(loggedUser);
-
-			/**
-			 * On enregistre son activité
-			 */
-			AgentActivity activ = new AgentActivity();
-			activ.setAgent(loggedUser);
-			activ.setLog(a.getLog());
-			activ.setContext("LOGOUT");
-			activ.setCreatedAt(Calendar.getInstance().getTime());
-			agentActivityRepository.save(activ);
-
-			HashMap res = new HashMap();
-			res.put("status", true);
-			res.put("message", 1000);
-			res.put("data", loggedUser.toJSONString());
-			return res;
-		}
-		HashMap obj = new HashMap();
-		obj.put("code", "101");
-		obj.put("label", "INVALID_CREDENTIAL");
-		HashMap res = new HashMap();
-		res.put("status", false);
-		res.put("message", 1001);
-		res.put("errors", obj);
-		return res;
+		return agentService.logout(a);
 	}
 }

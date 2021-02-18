@@ -5,8 +5,7 @@
  */
 package com.bixterprise.gateway.config;
 
-import com.bixterprise.gateway.GatewayApp;
-import com.bixterprise.gateway.web.rest.WebSocketService;
+import com.bixterprise.gateway.service.WebSocketService;
 import com.bixterprise.gateway.websocket.messages.MessageType;
 import io.socket.client.IO;
 import io.socket.client.Socket;

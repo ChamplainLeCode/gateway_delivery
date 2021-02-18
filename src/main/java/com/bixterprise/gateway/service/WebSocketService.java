@@ -1,4 +1,4 @@
-package com.bixterprise.gateway.web.rest;
+package com.bixterprise.gateway.service;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +8,8 @@ import com.bixterprise.gateway.domain.AutomateAgents;
 import com.bixterprise.gateway.domain.TransactionActivity;
 import com.bixterprise.gateway.domain.WorkSpace;
 import com.bixterprise.gateway.service.WorkSpaceService;
+import com.bixterprise.gateway.service.AgentService;
+import com.bixterprise.gateway.service.TransactionService;
 import com.bixterprise.gateway.utils.ObjectParser;
 import com.bixterprise.gateway.utils.PhoneOperator;
 import io.socket.client.Socket;
@@ -31,11 +33,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 @Service
 public class WebSocketService  {
 
-	public static HashMap<String, Object> map = new HashMap<>();
 	
-	@Autowired AgentsResource agentsRestController;
+	@Autowired AgentService agentService;
     
-	@Autowired TransactionResource transactionRestController;
+	@Autowired TransactionService transactionService;
 	
         @Autowired @Qualifier("gatewayDeliverer") Socket gatewayDeliverer;
         
@@ -50,9 +51,6 @@ public class WebSocketService  {
         @Autowired @Qualifier("gatewayMtnWorkSpaceThreadLock") Lock mtnThreadLock;
         @Autowired @Qualifier("gatewayOrangeWorkSpaceThreadLock") Lock orangeThreadLock;
 	
-	public HashMap<String, Object> getMap() {
-		return map;
-	}
         
         public void send(WorkSpace workSpace){
             
@@ -119,7 +117,7 @@ public class WebSocketService  {
 //				AutomateAgents agent = ObjectParser.parse(HashMap.class.cast(message.get("message")).toString(), AutomateAgents.class);
 //				if(agent != null) {
 //					agent.setFcm_token(session.getId()); 
-//					HashMap rest = agentsRestController.login(agent);
+//					HashMap rest = agentService.login(agent);
 //					System.out.println(rest);
 //					if(Boolean.class.cast(rest.get("status"))) {
 //						HashMap<String, Object> pipeEntry = new HashMap<>();
@@ -136,7 +134,7 @@ public class WebSocketService  {
 //				AutomateAgents agent = ObjectParser.parse(HashMap.class.cast(message.get("message")).toString(), AutomateAgents.class);
 //				if(agent != null) {
 //					agent.setFcm_token(session.getId());
-//					HashMap rest = agentsRestController.logout(agent);
+//					HashMap rest = agentService.logout(agent);
 //					//map.remove(session.getId());
 //					rest.put("type", "logout");
 //					session.sendMessage(new TextMessage(rest.toString().getBytes()));
@@ -147,7 +145,7 @@ public class WebSocketService  {
 //	
 //				TransactionActivity ta = ObjectParser.parse(HashMap.class.cast(message.get("message")).toString(), TransactionActivity.class);
 //				if(ta != null) {
-//					HashMap rest = transactionRestController.CommandReceptionReport(ta);
+//					HashMap rest = transactionService.CommandReceptionReport(ta);
 //					rest.put("type", "notify");
 //					session.sendMessage(new TextMessage(rest.toString().getBytes()));
 //				}
@@ -155,7 +153,7 @@ public class WebSocketService  {
 //	
 //				TransactionActivity ta = ObjectParser.parse(HashMap.class.cast(message.get("message")).toString(), TransactionActivity.class);
 //				if(ta != null) {
-//					HashMap rest = transactionRestController.CommandComplete(ta);
+//					HashMap rest = transactionService.CommandComplete(ta);
 //					System.out.println(rest);
 //					rest.put("type", "update");
 //					session.sendMessage(new TextMessage(rest.toString().getBytes()));
@@ -200,7 +198,7 @@ public class WebSocketService  {
                     
                     if(agent != null) {
                         agent.setFcm_token(String.class.cast(args[1])); 
-                        HashMap rest = agentsRestController.login(agent);
+                        HashMap rest = agentService.login(agent);
                         rest.put("pipe", agent.getFcm_token());
                         if(Boolean.class.cast(rest.get("status"))) {
                                 HashMap<String, Object> pipeEntry = new HashMap<>();
@@ -210,7 +208,7 @@ public class WebSocketService  {
                                 agentListLock.lock();
                                 System.out.println("\n\n############################ LOCK ON LOGIN ##############");
                                 try {
-                                    map.put(agent.getFcm_token(), pipeEntry);
+                                    WorkSpaceService.map.put(agent.getFcm_token(), pipeEntry);
                                 } finally {
                                     System.out.println("\n\n############################ UNLOCK ON LOGIN ##############");
                                     agentListLock.unlock();
@@ -233,7 +231,7 @@ public class WebSocketService  {
             /**
              * On récupère le 
              */
-            HashMap m = HashMap.class.cast(map.get(args[0].toString()));
+            HashMap m = HashMap.class.cast(WorkSpaceService.map.get(args[0].toString()));
             if(m != null){
                 m = (HashMap) m.get("agent");
                 AutomateAgents ag = new AutomateAgents();
@@ -242,11 +240,11 @@ public class WebSocketService  {
                 ag.setLog("Déconnexion Agent");
                 ag.setFcm_token(String.class.cast(m.get("fcm_token")));
                 
-                HashMap rest = agentsRestController.logout(ag);
+                HashMap rest = agentService.logout(ag);
                 if(Boolean.class.cast(rest.get("status"))) {
                     agentListLock.lock();
                     try{
-                        map.remove(ag.getFcm_token());
+                        WorkSpaceService.map.remove(ag.getFcm_token());
                     }finally{
                         agentListLock.unlock();
                     }
@@ -283,7 +281,7 @@ public class WebSocketService  {
                     ta.setId(m.getLong("id"));
                     ta.setLog(m.getString("log"));
                     ta.setStatus(m.getString("status"));
-                    transactionRestController.CommandComplete(ta);
+                    transactionService.receptionCommand(ta);
                 } catch (JSONException ex) {
                     Logger.getLogger(WebSocketService.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -301,7 +299,7 @@ public class WebSocketService  {
         if(receptionDeliveries != null && receptionDeliveries.length > 0)
             for(Object id : receptionDeliveries){
                 TransactionActivity ta = new TransactionActivity(Long.parseLong(id+""));
-                    HashMap rest = transactionRestController.CommandReceptionReport(ta);
+                    HashMap rest = transactionService.commandeReception(ta);
                 gatewayDeliverer.emit("commande/notify", rest);
 //                    rest.put("type", "notify");
 //                    session.sendMessage(new TextMessage(rest.toString().getBytes()));

@@ -26,6 +26,7 @@ import com.bixterprise.gateway.repository.TransactionActivityRepository;
 import com.bixterprise.gateway.domain.AgentTransaction;
 import com.bixterprise.gateway.domain.AutomateAgents;
 import com.bixterprise.gateway.domain.TransactionActivity;
+import com.bixterprise.gateway.service.WorkSpaceService;
 import java.util.concurrent.locks.Lock;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -48,7 +49,6 @@ public class AgentTransactionResource {
 	TransactionActivityRepository tar;
 
         @Autowired @Qualifier("gatewayAgentListLock") Lock agentLocker;       
-        @Autowired WebSocketService ws;
 
 
 	@GetMapping("/all")
@@ -230,8 +230,8 @@ public class AgentTransactionResource {
                         agentLocker.lock();
                         try{
                             System.out.println("\n\n############################ AGENT UNLOCK ON  AGENT TRANSACTION  UPDATE RECHARGE RESOURCE ##############");
-                            for (String key : ws.getMap().keySet()) {                                        
-                                HashMap<String, Object> entry = HashMap.class.cast(ws.getMap().get(key));
+                            for (String key : WorkSpaceService.map.keySet()) {                                        
+                                HashMap<String, Object> entry = HashMap.class.cast(WorkSpaceService.map.get(key));
                                 HashMap<String, Object> agentMap = HashMap.class.cast(entry.get("agent"));
                                 if(agentMap.get("phone").toString().equals(a.getAgent().getPhone())){
                                     agentMap.put("balance", a.getAgent().getBalance());
