@@ -100,8 +100,8 @@ public class AgentService {
         return agentRepository.findByImei(imei).orElse(null);
     }
 
-    public void save(AutomateAgents a) {
-        agentRepository.save(a);
+    public AutomateAgents save(AutomateAgents a) {
+        return agentRepository.save(a);
     }
 
     public AutomateAgents doLogin(String phone, String imei) {

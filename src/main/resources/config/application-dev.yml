@@ -125,5 +125,5 @@ sp:
 
 microservice:
   deliverer:
-    url: http://74.208.183.205:8087/server
+    url: http://127.0.0.1:8087/server
     login:

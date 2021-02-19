@@ -11,7 +11,7 @@ package com.bixterprise.gateway.utils;
  */
 public enum PhoneOperator {
     
-    MTN("MTN Cameroon"), ORANGE("Orange"), NEXTTEL("NEXTTEL"), UNKNOWN("UNKNOWN");
+    MTN("MTN"), ORANGE("Orange"), NEXTTEL("NEXTTEL"), UNKNOWN("UNKNOWN");
     
     String name;
     

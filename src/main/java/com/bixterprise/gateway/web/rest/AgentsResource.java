@@ -115,7 +115,7 @@ public class AgentsResource {
 		a.setCreatedAt(Calendar.getInstance().getTime());
 		a.setUpdatedAt(a.getCreatedAt());
 		try {
-			agentService.save(a);
+			final AutomateAgents aa = agentService.save(a);
 			HashMap obj = new HashMap();
 			obj.put("code", 100);
 			obj.put("label", "success");
@@ -124,8 +124,8 @@ public class AgentsResource {
                          */
                         new Thread(){
                             public void run(){
-                                http.updateOperator(a);
-                                agentService.save(a);
+                                http.updateOperator(aa);
+                                agentService.save(aa);
                             } 
                         }.start();
 			return obj;
