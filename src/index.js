@@ -274,6 +274,8 @@ io.of('/gateway').on('connection', (mobile) => {
 })
 
 
-http.listen(3000, () => {
-log('listening on *:3000')
+let isProd = -1 < process.argv.findIndex((val) => val.indexOf('-Pprod')>-1);
+
+http.listen(isProd ? 8087 : 3000, () => {
+log('listening on *:'+(isProd ? 8087 : 3000))
 })
